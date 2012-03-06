@@ -47,7 +47,7 @@ public:
     //==============================================================================
     const String getApplicationName()
     {
-        return "NewProject";
+        return "Loop";
     }
 
     const String getApplicationVersion()

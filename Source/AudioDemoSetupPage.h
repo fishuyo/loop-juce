@@ -23,7 +23,7 @@
 #define __JUCER_HEADER_AUDIODEMOSETUPPAGE_AUDIODEMOSETUPPAGE_244CE6A7__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "JuceHeader.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 //[/Headers]
 
 

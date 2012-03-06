@@ -2,8 +2,6 @@
  *  AudioUtils.cpp
  *  rangatang
  *
- *  Created by Tim Wood on 1/22/11.
- *  Copyright 2011 __MyCompanyName__. All rights reserved.
  *
  */
 
@@ -249,9 +247,9 @@ void AudioPlayer::loadFile(const File& audioFile)
         currentAudioFileSource = new AudioFormatReaderSource (reader, true);
 		
         // ..and plug it into our transport source
-        transportSource.setSource (currentAudioFileSource,
-                                   32768, // tells it to buffer this many samples ahead
-                                   reader->sampleRate);
+        transportSource.setSource (currentAudioFileSource );
+                                   //32768, // tells it to buffer this many samples ahead
+                                   //reader->sampleRate, 2);
     }
 }
 

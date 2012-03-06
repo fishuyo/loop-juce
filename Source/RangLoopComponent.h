@@ -23,9 +23,12 @@
 #define __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_4691E1B__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "JuceHeader.h"
+
+#include <vector>
+#include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioUtils.h"
 #include "AudioDemoSetupPage.h"
+#include "LoopBuffer.h"
 
 //[/Headers]
 
@@ -70,7 +73,7 @@ public:
 	void audioDeviceStopped();
 	void changeListenerCallback (ChangeBroadcaster *source);
 	void updatePlaytimeLabel();
-	void timerCallback();
+  void timerCallback();
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -100,6 +103,8 @@ private:
 	AudioSampleBuffer *currentBuffer;
 	AudioSampleBuffer *sampleBuffer;
 	AudioSampleBuffer *sampleBufferB;
+  std::vector<Loop> loops;
+  int curLoop;
 	bool loopB;
 	AudioDeviceManager audioDeviceManager;
 	//AudioDeviceSelectorComponent* deviceSelector;

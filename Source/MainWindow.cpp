@@ -9,6 +9,7 @@
 */
 
 #include "MainWindow.h"
+#include "RangLoopComponent.h"
 
 
 //==============================================================================
@@ -17,8 +18,15 @@ MainAppWindow::MainAppWindow()
                       Colours::lightgrey,
                       DocumentWindow::allButtons)
 {
-    centreWithSize (500, 400);
-    setVisible (true);
+	RangLoopComponent* const contentComponent = new RangLoopComponent();
+	
+	setContentOwned (contentComponent, true);
+	
+	centreWithSize (getWidth(), getHeight());
+	
+	setVisible (true);
+    //centreWithSize (500, 400);
+    //setVisible (true);
 }
 
 MainAppWindow::~MainAppWindow()

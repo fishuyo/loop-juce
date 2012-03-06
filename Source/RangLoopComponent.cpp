@@ -49,28 +49,28 @@ RangLoopComponent::RangLoopComponent ()
       speedButton (0),
       cachedImage_ftttmlogorings_gif (0)
 {
-    addAndMakeVisible (recordButton = new TextButton (T("record")));
+    addAndMakeVisible (recordButton = new TextButton ("record"));
     recordButton->addListener (this);
     recordButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
     recordButton->setColour (TextButton::buttonOnColourId, Colours::green);
 
-    addAndMakeVisible (switchButton = new TextButton (T("switch")));
-    switchButton->setButtonText (T("A / B"));
+    addAndMakeVisible (switchButton = new TextButton ("switch"));
+    switchButton->setButtonText ("A / B");
     switchButton->addListener (this);
     switchButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
     switchButton->setColour (TextButton::buttonOnColourId, Colours::green);
 
-    addAndMakeVisible (reverseButton = new TextButton (T("reverse")));
+    addAndMakeVisible (reverseButton = new TextButton ("reverse"));
     reverseButton->addListener (this);
     reverseButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
     reverseButton->setColour (TextButton::buttonOnColourId, Colours::green);
 
-    addAndMakeVisible (stackButton = new TextButton (T("stack")));
+    addAndMakeVisible (stackButton = new TextButton ("stack"));
     stackButton->addListener (this);
     stackButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
     stackButton->setColour (TextButton::buttonOnColourId, Colours::green);
 
-    addAndMakeVisible (slider = new Slider (T("new slider")));
+    addAndMakeVisible (slider = new Slider ("new slider"));
     slider->setRange (0, 10, 0);
     slider->setSliderStyle (Slider::LinearHorizontal);
     slider->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
@@ -78,8 +78,8 @@ RangLoopComponent::RangLoopComponent ()
     slider->setColour (Slider::rotarySliderFillColourId, Colour (0xff6be171));
     slider->addListener (this);
 
-    addAndMakeVisible (durationLabel = new Label (T("durationLabel"),
-                                                  T("0:00")));
+    addAndMakeVisible (durationLabel = new Label ("durationLabel",
+                                                  "0:00"));
     durationLabel->setFont (Font (10.0000f, Font::bold));
     durationLabel->setJustificationType (Justification::centred);
     durationLabel->setEditable (false, false, false);
@@ -87,8 +87,8 @@ RangLoopComponent::RangLoopComponent ()
     durationLabel->setColour (TextEditor::textColourId, Colours::black);
     durationLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (playtimeLabel = new Label (T("playtime"),
-                                                  T("0:00")));
+    addAndMakeVisible (playtimeLabel = new Label ("playtime",
+                                                  "0:00"));
     playtimeLabel->setFont (Font (10.0000f, Font::plain));
     playtimeLabel->setJustificationType (Justification::centred);
     playtimeLabel->setEditable (false, false, false);
@@ -96,15 +96,15 @@ RangLoopComponent::RangLoopComponent ()
     playtimeLabel->setColour (TextEditor::textColourId, Colours::black);
     playtimeLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (volumeKnob = new Slider (T("volumeKnob")));
+    addAndMakeVisible (volumeKnob = new Slider ("volumeKnob"));
     volumeKnob->setRange (0, 10, 0);
     volumeKnob->setSliderStyle (Slider::Rotary);
     volumeKnob->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     volumeKnob->setColour (Slider::rotarySliderFillColourId, Colour (0xff6be171));
     volumeKnob->addListener (this);
 
-    addAndMakeVisible (label3 = new Label (T("new label"),
-                                           T("volume")));
+    addAndMakeVisible (label3 = new Label ("new label",
+                                           "volume"));
     label3->setFont (Font (11.0000f, Font::plain));
     label3->setJustificationType (Justification::centredLeft);
     label3->setEditable (false, false, false);
@@ -112,15 +112,15 @@ RangLoopComponent::RangLoopComponent ()
     label3->setColour (TextEditor::textColourId, Colours::black);
     label3->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (decayKnob = new Slider (T("decayKnob")));
+    addAndMakeVisible (decayKnob = new Slider ("decayKnob"));
     decayKnob->setRange (0, 10, 0);
     decayKnob->setSliderStyle (Slider::Rotary);
     decayKnob->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     decayKnob->setColour (Slider::rotarySliderFillColourId, Colour (0xff6be171));
     decayKnob->addListener (this);
 
-    addAndMakeVisible (label2 = new Label (T("new label"),
-                                           T("decay")));
+    addAndMakeVisible (label2 = new Label ("new label",
+                                           "decay"));
     label2->setFont (Font (11.0000f, Font::plain));
     label2->setJustificationType (Justification::centredLeft);
     label2->setEditable (false, false, false);
@@ -128,15 +128,15 @@ RangLoopComponent::RangLoopComponent ()
     label2->setColour (TextEditor::textColourId, Colours::black);
     label2->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (speedKnob = new Slider (T("speedKnob")));
+    addAndMakeVisible (speedKnob = new Slider ("speedKnob"));
     speedKnob->setRange (0, 10, 0);
     speedKnob->setSliderStyle (Slider::Rotary);
     speedKnob->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
     speedKnob->setColour (Slider::rotarySliderFillColourId, Colour (0xff6be171));
     speedKnob->addListener (this);
 
-    addAndMakeVisible (label4 = new Label (T("new label"),
-                                           T("speed")));
+    addAndMakeVisible (label4 = new Label ("new label",
+                                           "speed"));
     label4->setFont (Font (11.0000f, Font::plain));
     label4->setJustificationType (Justification::centredLeft);
     label4->setEditable (false, false, false);
@@ -144,12 +144,12 @@ RangLoopComponent::RangLoopComponent ()
     label4->setColour (TextEditor::textColourId, Colours::black);
     label4->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
-    addAndMakeVisible (deviceButton = new TextButton (T("devices")));
-    deviceButton->setButtonText (T("Audio device..."));
+    addAndMakeVisible (deviceButton = new TextButton ("devices"));
+    deviceButton->setButtonText ("Audio device...");
     deviceButton->addListener (this);
     deviceButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
 
-    addAndMakeVisible (speedButton = new TextButton (T("speed")));
+    addAndMakeVisible (speedButton = new TextButton ("speed"));
     speedButton->addListener (this);
     speedButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
     speedButton->setColour (TextButton::buttonOnColourId, Colours::green);
@@ -203,8 +203,8 @@ RangLoopComponent::RangLoopComponent ()
     if (error.isNotEmpty())
     {
         AlertWindow::showMessageBox (AlertWindow::WarningIcon,
-                                     T("Sound PLy3R"),
-                                     T("Couldn't open an output device!\n\n") + error);
+                                     "Sound PLy3R",
+                                     "Couldn't open an output device!\n\n" + error);
     }
     else
     {
@@ -213,9 +213,11 @@ RangLoopComponent::RangLoopComponent ()
         // start the IO device pulling its data from our callback..
 		audioDeviceManager.addAudioCallback (liveAudioInDisplayComp);
 		audioDeviceManager.addAudioCallback (this);
-		audioDeviceManager.addAudioCallback (recorder);
+		//audioDeviceManager.addAudioCallback (recorder);
 		audioDeviceManager.addAudioCallback (liveAudioOutDisplayComp);
 	}
+  
+  this->toFront(true);
     //[/Constructor]
 }
 
@@ -328,7 +330,7 @@ void RangLoopComponent::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_deviceButton] -- add your button handler code here..
 		AudioDemoSetupPage *ds = new AudioDemoSetupPage(audioDeviceManager);
 		
-		DialogWindow::showModalDialog(	T("Configure Audio Device"),
+		DialogWindow::showModalDialog(	"Configure Audio Device",
 									   ds,
 									   this,
 									  Colours::black,
@@ -454,51 +456,66 @@ bool RangLoopComponent::keyPressed (const KeyPress& key)
 
 void RangLoopComponent::play(){
 	
-	if(!currentBuffer) return;
+	if( curLoop > loops.size()) return;
 	
-	loopB ? playbackPositionB = 0 : playbackPosition = 0;
+  loops[curLoop].rewind();
+  loops[curLoop].play(); 
+  
+	//loopB ? playbackPositionB = 0 : playbackPosition = 0;
 	nowPlaying = true;
 }
 void RangLoopComponent::stop(){
-	nowPlaying = false;	
+  if( curLoop > loops.size() ) return;
+	loops[curLoop].stop();	
 }
 
 void RangLoopComponent::toggleRecord(){
 	
 	if(!nowRecording){
 		int sampleRate = audioDeviceManager.getCurrentAudioDevice()->getCurrentSampleRate();
-		if(currentBuffer) deleteAndZero(currentBuffer);
-		currentBuffer = new AudioSampleBuffer(1, 60 * sampleRate );
+		if( loops.size() <= curLoop ){
+      curLoop = loops.size();
+      loops.push_back( Loop( 10.0f, sampleRate ));
+    } //else loops[curLoop] = Loop( 10.f, sampleRate );
+                      
+		//currentBuffer = new AudioSampleBuffer(1, 60 * sampleRate );
 		recordButton->setToggleState(true,false);
 		
-		if( loopB ){
+		/*if( loopB ){
 			samplesRecordedB = 0;
 			sampleBufferB = currentBuffer;
 		}else {
 			samplesRecorded = 0;
 			sampleBuffer = currentBuffer;
-		}
+		}*/
+    loops[curLoop].stop();
+    loops[curLoop].record();
 		nowPlaying = false;
 		nowRecording = true;
 	}else{
+    
 		nowRecording = false;
+    loops[curLoop].stop();
 		recordButton->setToggleState(false,false);
 		play();
 	}
 	
 }
 void RangLoopComponent::toggleStack(){
-	if(!nowStacking && currentBuffer){
+	if(!nowStacking && curLoop < loops.size() ){
 		nowStacking = true;
+    loops[curLoop].stack();
 		stackButton->setToggleState(true,false);
 		
 	}else{
 		nowStacking = false;
+    loops[curLoop].stack();
 		stackButton->setToggleState(false,false);
 	}	
 }
 void RangLoopComponent::toggleReverse(){	
 
+  loops[curLoop].reverse();
 	nowReversing = !nowReversing;
 	reverseButton->setToggleState(nowReversing,false);
 		
@@ -507,22 +524,24 @@ void RangLoopComponent::switchLoop(){
 	
 	if( nowRecording ) toggleRecord();
 
-	AudioSampleBuffer* buff;
+	/*AudioSampleBuffer* buff;
 	loopB = !loopB;
 	switchButton->setToggleState(loopB, false);
 	
-	buff = loopB ? sampleBufferB : sampleBuffer;
+	buff = loopB ? sampleBufferB : sampleBuffer;*/
+  
+  curLoop = !curLoop;
 	
-	if( !buff ){
+	if( loops.size() <= curLoop ){
 		
 		nowRecording = false;
 		nowPlaying = false;
-		currentBuffer = NULL;
+		//currentBuffer = NULL;
 		toggleRecord();
 		//int sampleRate = audioDeviceManager.getCurrentAudioDevice()->getCurrentSampleRate();
 		//buff = new AudioSampleBuffer(1, 60 * sampleRate );
 	}else {
-		currentBuffer = buff;
+		//currentBuffer = buff;
 		play();
 	}
 }
@@ -533,8 +552,14 @@ void RangLoopComponent::audioDeviceIOCallback (const float** inputChannelData,
 												 int totalNumOutputChannels,
 												 int numSamples)
 {
-	
-	activeLoop->read
+  for (int i = 0; i < totalNumOutputChannels; ++i)
+    if (outputChannelData[i] != 0)
+      zeromem (outputChannelData[i], sizeof (float) * numSamples);
+  
+	if( nowRecording || nowPlaying )
+    loops[curLoop].audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
+
+
 	/*double gain = volumeKnob->getValue() / volumeKnob->getMaximum();
 	unsigned long samplesRec = loopB ? samplesRecordedB : samplesRecorded;
 	unsigned long playbackPos = loopB ? playbackPositionB : playbackPosition;
@@ -642,7 +667,7 @@ void RangLoopComponent::audioDeviceIOCallback (const float** inputChannelData,
 	}else{
 		samplesRecorded = samplesRec;
 		playbackPosition = playbackPos;
-	}
+	}*/
 
 	//for( int i = 0; i < numSamples; i++)
 	//	outputChannelData[0][i] = inputChannelData[0][i];

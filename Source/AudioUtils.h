@@ -7,7 +7,7 @@
  *
  */
 
-#include "JuceHeader.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 
 /*
 *Component to Display Stream of Audio Input 
