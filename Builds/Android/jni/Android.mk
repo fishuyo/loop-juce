@@ -7,7 +7,11 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := juce_jni
 LOCAL_SRC_FILES := \
-  ../../../Source/MainWindow.cpp\
+	../../../Source/AudioUtils.cpp\
+	../../../Source/AudioDemoSetupPage.cpp\
+	../../../Source/LoopBuffer.cpp\
+	../../../Source/RangLoopComponent.cpp\
+	../../../Source/MainWindow.cpp\
   ../../../Source/Main.cpp\
   ../../../JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.cpp\
   ../../../JuceLibraryCode/modules/juce_audio_devices/juce_audio_devices.cpp\

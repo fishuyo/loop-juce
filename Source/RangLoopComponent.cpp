@@ -202,9 +202,9 @@ RangLoopComponent::RangLoopComponent ()
 
     if (error.isNotEmpty())
     {
-        AlertWindow::showMessageBox (AlertWindow::WarningIcon,
-                                     "Sound PLy3R",
-                                     "Couldn't open an output device!\n\n" + error);
+      //AlertWindow::showMessageBox(AlertWindow::WarningIcon,
+      //                               "Sound PLy3R",
+      //                               "Couldn't open an output device!\n\n" + error);
     }
     else
     {
@@ -330,12 +330,12 @@ void RangLoopComponent::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_deviceButton] -- add your button handler code here..
 		AudioDemoSetupPage *ds = new AudioDemoSetupPage(audioDeviceManager);
 		
-		DialogWindow::showModalDialog(	"Configure Audio Device",
+		/*DialogWindow::showModalDialog(	"Configure Audio Device",
 									   ds,
 									   this,
 									  Colours::black,
 										  true);
-		deleteAndZero(ds);
+		deleteAndZero(ds);*/
         //[/UserButtonCode_deviceButton]
     }
     else if (buttonThatWasClicked == speedButton)
