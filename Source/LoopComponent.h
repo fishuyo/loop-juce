@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  12 Mar 2012 11:56:22am
+  Creation date:  13 Mar 2012 4:27:04am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,8 +19,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_LOOPCOMPONENT_LOOPCOMPONENT_C8D31A38__
-#define __JUCER_HEADER_LOOPCOMPONENT_LOOPCOMPONENT_C8D31A38__
+#ifndef __JUCER_HEADER_LOOPCOMPONENT_LOOPCOMPONENT_F0FED0CF__
+#define __JUCER_HEADER_LOOPCOMPONENT_LOOPCOMPONENT_F0FED0CF__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -37,8 +37,7 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class LoopComponent  : public Component,
-                        public AudioIODeviceCallback
+class LoopComponent  : public Component
 {
 public:
     //==============================================================================
@@ -55,7 +54,7 @@ public:
                                 int numSamples);
     void audioDeviceAboutToStart (AudioIODevice* device);
     void audioDeviceStopped();
-  
+
     Loop loop;
     char* ident;
     bool selected;
@@ -76,7 +75,7 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-  
+
     //[/UserVariables]
 
     //==============================================================================
@@ -89,4 +88,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_LOOPCOMPONENT_LOOPCOMPONENT_C8D31A38__
+#endif   // __JUCER_HEADER_LOOPCOMPONENT_LOOPCOMPONENT_F0FED0CF__

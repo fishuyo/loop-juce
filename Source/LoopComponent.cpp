@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  12 Mar 2012 11:56:22am
+  Creation date:  13 Mar 2012 4:27:04am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -63,28 +63,29 @@ LoopComponent::~LoopComponent()
 //==============================================================================
 void LoopComponent::paint (Graphics& g)
 {
-  //[UserPrePaint] Add your own custom painting code here..
+    //[UserPrePaint] Add your own custom painting code here..
   float rms = loop.rms*20.f;
   if(rms > 1.f ) rms = 1.f;
   float thick = 2.0f + 5.f*rms*loop.gain;
-  
+  int h = loop.gain * 6;
+
   Colour c,c2,c3;
   if( loop.numSamples != 0 ){
     if( loop.stacking ) c = Colour( 165,81,81).withAlpha(rms);
     else c = Colour( 58,172,62).withAlpha(rms);
-    
+
     if(loop.recording) c2 = Colour( 200,30,30 ).withAlpha(.8f);
     else c2 = Colour( 58,172,62 ).withAlpha(.8f);
-    
+
   }else{
     c = Colour( 80,80,80).withAlpha(.3f);
     c2 = Colour( 30,30,30).withAlpha(.7f);
   }
-  
+
   if(selected) c3 = Colour( 255,0,0 );
   else c3 = Colour( 60, 30, 30 ).withAlpha(.7f);
-  
-  //[/UserPrePaint]
+
+    //[/UserPrePaint]
 
     g.setColour (c);
     g.fillRoundedRectangle (2.0f, 2.0f, 45.0f, 45.0f, 5.0000f);
@@ -93,10 +94,27 @@ void LoopComponent::paint (Graphics& g)
     g.drawRoundedRectangle (2.0f, 2.0f, 45.0f, 45.0f, 5.0000f, thick);
 
     g.setColour (c3);
-    g.setFont (Font (Font::getDefaultMonospacedFontName(), 15.0000f, Font::bold));
-    g.drawText (ident,
+    g.setFont (Font (Font::getDefaultMonospacedFontName(), 9.6000f, Font::bold));
+    g.drawText (L"15",
                 20, 20, 10, 10,
                 Justification::centred, true);
+
+    g.setColour (Colour (0xa03aac3e));
+    g.fillRect (10, 35, 30, 2);
+
+    g.setColour (Colour (0xff2a74a5));
+    g.fillRect (39, 28-h, 2, h);
+
+  if( loop.recording || loop.stacking ){
+    g.setColour (Colour (0xffb33f3f));
+    g.fillEllipse (10.0f, 10.0f, 4.0f, 4.0f);
+  }
+
+    g.setColour (Colour (0xff2a74a5));
+    g.fillRect (35, 10, 2, 18);
+
+    g.setColour (Colour (0xff2a6ba5));
+    g.fillRect (10, 39, 30, 2);
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -132,9 +150,19 @@ void LoopComponent::mouseDrag (const MouseEvent& e)
 void LoopComponent::mouseWheelMove (const MouseEvent& e, float wheelIncrementX, float wheelIncrementY)
 {
     //[UserCode_mouseWheelMove] -- Add your code here...
-    loop.gain += wheelIncrementY;
-    if( loop.gain < 0.f ) loop.gain = 0.f;
-    else if( loop.gain > 3.0f) loop.gain = 3.0f;
+    if( e.mods == ModifierKeys::shiftModifier ){
+      loop.b[0].rPos += wheelIncrementX*1024;
+      while( loop.b[0].rPos < loop.b[0].rMin ) loop.b[0].rPos += (loop.b[0].rMax-loop.b[0].rMin);
+      while( loop.b[0].rPos > loop.b[0].rMax ) loop.b[0].rPos -= (loop.b[0].rMax-loop.b[0].rMin);
+      
+    }else{
+      loop.gain += wheelIncrementY;
+      loop.decay += wheelIncrementX;
+      if( loop.gain < 0.f ) loop.gain = 0.f;
+      else if( loop.gain > 3.0f) loop.gain = 3.0f;
+      if( loop.decay > 1.f ) loop.decay = 1.f;
+      else if( loop.decay < 0.f ) loop.decay = 0.f;
+    }
     //[/UserCode_mouseWheelMove]
 }
 
@@ -183,9 +211,14 @@ BEGIN_JUCER_METADATA
   <BACKGROUND backgroundColour="0">
     <ROUNDRECT pos="2.5 2.5 45 45" cornerSize="5" fill="solid: 61cbc6c7" hasStroke="1"
                stroke="3.0999999, mitered, butt" strokeColour="solid: a03aac3e"/>
-    <TEXT pos="20 20 10 10" fill="solid: ff875b5b" hasStroke="0" text="1"
-          fontname="Default monospaced font" fontsize="15" bold="1" italic="0"
+    <TEXT pos="20 20 10 10" fill="solid: ff875b5b" hasStroke="0" text="15"
+          fontname="Default monospaced font" fontsize="9.6" bold="1" italic="0"
           justification="36"/>
+    <RECT pos="10 35 30 2" fill="solid: a03aac3e" hasStroke="0"/>
+    <RECT pos="39 10 2 18" fill="solid: ff2a74a5" hasStroke="0"/>
+    <ELLIPSE pos="10 10 4 4" fill="solid: ffb33f3f" hasStroke="0"/>
+    <RECT pos="35 10 2 18" fill="solid: ff2a74a5" hasStroke="0"/>
+    <RECT pos="10 39 30 2" fill="solid: ff2a6ba5" hasStroke="0"/>
   </BACKGROUND>
 </JUCER_COMPONENT>
 
