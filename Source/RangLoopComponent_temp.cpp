@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  12 Mar 2012 1:10:46pm
+  Creation date:  12 Mar 2012 1:10:26pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -22,12 +22,10 @@
 //[Headers] You can add your own extra header files here...
 //[/Headers]
 
-#include "RangLoopComponent.h"
+#include "RangLoopComponent_temp.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
-
-
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -71,7 +69,6 @@ RangLoopComponent::RangLoopComponent ()
       label5 (0),
       cachedImage_ftttmlogorings_gif (0)
 {
-  {
     addAndMakeVisible (groupComponent2 = new GroupComponent (L"new group",
                                                              L"Loop Controls"));
     groupComponent2->setColour (GroupComponent::outlineColourId, Colour (0x66812b2b));
@@ -185,28 +182,28 @@ RangLoopComponent::RangLoopComponent ()
     deviceButton->addListener (this);
     deviceButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
 
-    addAndMakeVisible (loopComp1 = new LoopComponent("1"));
+    addAndMakeVisible (loopComp1 = new LoopComponent());
     addAndMakeVisible (audioInDispComp = new LiveAudioDisplayComp());
     audioInDispComp->setName (L"Audio Input Display");
 
     addAndMakeVisible (audioOutDispComp = new LiveAudioDisplayComp());
     audioOutDispComp->setName (L"Audio Output Display");
 
-    addAndMakeVisible (loopComp2 = new LoopComponent("2"));
-    addAndMakeVisible (loopComp3 = new LoopComponent("3"));
-    addAndMakeVisible (loopComp4 = new LoopComponent("4"));
-    addAndMakeVisible (loopComp5 = new LoopComponent("5"));
-    addAndMakeVisible (loopComp6 = new LoopComponent("6"));
-    addAndMakeVisible (loopComp7 = new LoopComponent("7"));
-    addAndMakeVisible (loopComp8 = new LoopComponent("8"));
-    addAndMakeVisible (loopComp9 = new LoopComponent("9"));
-    addAndMakeVisible (loopComp10 = new LoopComponent("10"));
-    addAndMakeVisible (loopComp11 = new LoopComponent("11"));
-    addAndMakeVisible (loopComp12 = new LoopComponent("12"));
-    addAndMakeVisible (loopComp13 = new LoopComponent("13"));
-    addAndMakeVisible (loopComp14 = new LoopComponent("14"));
-    addAndMakeVisible (loopComp15 = new LoopComponent("15"));
-    addAndMakeVisible (loopComp16 = new LoopComponent("16"));
+    addAndMakeVisible (loopComp2 = new LoopComponent());
+    addAndMakeVisible (loopComp3 = new LoopComponent());
+    addAndMakeVisible (loopComp4 = new LoopComponent());
+    addAndMakeVisible (loopComp5 = new LoopComponent());
+    addAndMakeVisible (loopComp6 = new LoopComponent());
+    addAndMakeVisible (loopComp7 = new LoopComponent());
+    addAndMakeVisible (loopComp8 = new LoopComponent());
+    addAndMakeVisible (loopComp9 = new LoopComponent());
+    addAndMakeVisible (loopComp10 = new LoopComponent());
+    addAndMakeVisible (loopComp11 = new LoopComponent());
+    addAndMakeVisible (loopComp12 = new LoopComponent());
+    addAndMakeVisible (loopComp13 = new LoopComponent());
+    addAndMakeVisible (loopComp14 = new LoopComponent());
+    addAndMakeVisible (loopComp15 = new LoopComponent());
+    addAndMakeVisible (loopComp16 = new LoopComponent());
     addAndMakeVisible (groupComponent = new GroupComponent (L"Loops",
                                                             L"Loops"));
     groupComponent->setColour (GroupComponent::outlineColourId, Colour (0x66812b2b));
@@ -229,96 +226,20 @@ RangLoopComponent::RangLoopComponent ()
     label5->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
     cachedImage_ftttmlogorings_gif = ImageCache::getFromMemory (ftttmlogorings_gif, ftttmlogorings_gifSize);
-  }
+
     //[UserPreSize]
-	this->setWantsKeyboardFocus(true);
-
-	recordButton->setClickingTogglesState(true);
-	switchButton->setClickingTogglesState(true);
-	stackButton->setClickingTogglesState(true);
-	reverseButton->setClickingTogglesState(true);
-	//speedButton->setClickingTogglesState(true);
-
-	volumeKnob->setValue(8.0, false, false);
-	decayKnob->setValue(3.0, false, false);
-	speedKnob->setValue(5.0, false, false);
-
-	//deviceSelector = new AudioDeviceSelectorComponent (audioDeviceManager, 0, 2, 0, 2, true, true, true, false);
-
-	audioOutDispComp->setDisplayOutput(true);
     //[/UserPreSize]
 
     setSize (600, 400);
 
 
     //[Constructor] You can add your own custom stuff here..
-	// and initialise the device manager with no settings so that it picks a default device to use.
-	recorder = new AudioRecorder();
-  this->startTimer( 33 );
-
-	nowPlaying = false;
-	nowRecording = false;
-	nowStacking = false;
-	nowSpeeding = false;
-	nowReversing = false;
-  curLoop = 0;
-  
-  loops.push_back( &loopComp1->loop );loopComps.push_back( loopComp1 );
-  loops.push_back( &loopComp2->loop );loopComps.push_back( loopComp2 );
-  loops.push_back( &loopComp3->loop );loopComps.push_back( loopComp3 );
-  loops.push_back( &loopComp4->loop );loopComps.push_back( loopComp4 );
-  loops.push_back( &loopComp5->loop );loopComps.push_back( loopComp5 );
-  loops.push_back( &loopComp6->loop );loopComps.push_back( loopComp6 );
-  loops.push_back( &loopComp7->loop );loopComps.push_back( loopComp7 );
-  loops.push_back( &loopComp8->loop );loopComps.push_back( loopComp8 );
-  loops.push_back( &loopComp9->loop );loopComps.push_back( loopComp9 );
-  loops.push_back( &loopComp10->loop );loopComps.push_back( loopComp10 );
-  loops.push_back( &loopComp11->loop );loopComps.push_back( loopComp11 );
-  loops.push_back( &loopComp12->loop );loopComps.push_back( loopComp12 );
-  loops.push_back( &loopComp13->loop );loopComps.push_back( loopComp13 );
-  loops.push_back( &loopComp14->loop );loopComps.push_back( loopComp14 );
-  loops.push_back( &loopComp15->loop );loopComps.push_back( loopComp15 );
-  loops.push_back( &loopComp16->loop );loopComps.push_back( loopComp16 );
-
-
-    const String error (audioDeviceManager.initialise (1, /* number of input channels */
-                                                       2, /* number of output channels */
-                                                       0, /* no XML settings.. */
-                                                       true  /* select default device on failure */));
-
-    if (error.isNotEmpty())
-    {
-      //AlertWindow::showMessageBox(AlertWindow::WarningIcon,
-      //                               "Sound PLy3R",
-      //                               "Couldn't open an output device!\n\n" + error);
-    }
-    else
-    {
-        //audioSourcePlayer.setSource (&transportSource);
-
-        // start the IO device pulling its data from our callback..
-      audioDeviceManager.addAudioCallback (audioInDispComp);
-      //for( int i=0; i<loopComps.size(); i++ )
-      //  audioDeviceManager.addAudioCallback( loopComps[i] );
-
-      audioDeviceManager.addAudioCallback (this);
-      //audioDeviceManager.addAudioCallback (recorder);
-      audioDeviceManager.addAudioCallback (audioOutDispComp);
-	}
-
-  this->toFront(true);
     //[/Constructor]
 }
 
 RangLoopComponent::~RangLoopComponent()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-	audioDeviceManager.removeAudioCallback (recorder);
-    audioDeviceManager.removeAudioCallback (audioInDispComp);
-	audioDeviceManager.removeAudioCallback (audioOutDispComp);
-    recorder = 0;
-
-	//deleteAndZero(deviceSelector);
     //[/Destructor_pre]
 
     deleteAndZero (groupComponent2);
@@ -368,7 +289,6 @@ RangLoopComponent::~RangLoopComponent()
 void RangLoopComponent::paint (Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
-	//slider->setValue( audioDeviceManager.getCurrentInputLevel() );
     //[/UserPrePaint]
 
     g.fillAll (Colours::black);
@@ -422,9 +342,6 @@ void RangLoopComponent::resized()
     masterKnob->setBounds (256, 87, 40, 24);
     label5->setBounds (256, 112, 39, 16);
     //[UserResized] Add your own custom resize handling here..
-	//liveAudioInDisplayComp->setBounds (8, 4, getWidth() - 16, 64);
-	//liveAudioOutDisplayComp->setBounds (8, 208, getWidth() - 16, 64);
-	//deviceSelector->setBounds (350, 8, getWidth() / 3 - 16, getHeight() - 16);
     //[/UserResized]
 }
 
@@ -436,38 +353,26 @@ void RangLoopComponent::buttonClicked (Button* buttonThatWasClicked)
     if (buttonThatWasClicked == recordButton)
     {
         //[UserButtonCode_recordButton] -- add your button handler code here..
-		toggleRecord();
         //[/UserButtonCode_recordButton]
     }
     else if (buttonThatWasClicked == switchButton)
     {
         //[UserButtonCode_switchButton] -- add your button handler code here..
-		//switchLoop();
         //[/UserButtonCode_switchButton]
     }
     else if (buttonThatWasClicked == reverseButton)
     {
         //[UserButtonCode_reverseButton] -- add your button handler code here..
-		toggleReverse();
         //[/UserButtonCode_reverseButton]
     }
     else if (buttonThatWasClicked == stackButton)
     {
         //[UserButtonCode_stackButton] -- add your button handler code here..
-		toggleStack();
         //[/UserButtonCode_stackButton]
     }
     else if (buttonThatWasClicked == deviceButton)
     {
         //[UserButtonCode_deviceButton] -- add your button handler code here..
-		AudioDemoSetupPage *ds = new AudioDemoSetupPage(audioDeviceManager);
-
-		DialogWindow::showModalDialog(	"Configure Audio Device",
-									   ds,
-									   this,
-									  Colours::black,
-										  true);
-		deleteAndZero(ds);
         //[/UserButtonCode_deviceButton]
     }
 
@@ -507,7 +412,6 @@ void RangLoopComponent::sliderValueChanged (Slider* sliderThatWasMoved)
     }
 
     //[UsersliderValueChanged_Post]
-    updateLoop();
     //[/UsersliderValueChanged_Post]
 }
 
@@ -520,270 +424,13 @@ void RangLoopComponent::mouseWheelMove (const MouseEvent& e, float wheelIncremen
 bool RangLoopComponent::keyPressed (const KeyPress& key)
 {
     //[UserCode_keyPressed] -- Add your code here...
-	int code = key.getKeyCode();
-	ModifierKeys mods = key.getModifiers();
-
-	float val = 0.1f;
-
-	/*if ( mods == ModifierKeys::altModifier ){
-	//	switchLoop();
-
-	}
-	if (mods == ModifierKeys::ctrlModifier) {
-		if( nowPlaying )stop();
-		else play();
-	}*/
-	if (mods == ModifierKeys::commandModifier) {
-		toggleReverse();
-	}
-
-	if( mods == ModifierKeys::ctrlModifier ){
-		val = 1.0f;
-	}
-
-
-	if ( code == KeyPress::deleteKey || code == KeyPress::escapeKey ){
-		if( loops[curLoop]->playing ) stop();
-		else play();
-		return true;
-
-	}else if( code == 196640 ){
-		toggleReverse();
-		return true;
-
-	}else if( code == KeyPress::pageDownKey){
-		//switchLoop();
-		return true;
-
-	}else if( code == KeyPress::pageUpKey){
-		//switchLoop();
-		if( !loops[curLoop]->recording ) toggleRecord();
-		return true;
-
-	}else if( code == KeyPress::spaceKey ){
-			if( loops[curLoop]->playing )  toggleRecord();
-			else toggleStack();
-			return true;
-	}
-
-	if ( key.isCurrentlyDown() ){
-		if (code == KeyPress::downKey ){
-				volumeKnob->setValue( volumeKnob->getValue() - val, true, false);
-        goto update;
-		}else if( code == KeyPress::upKey ){
-				volumeKnob->setValue( volumeKnob->getValue() + val, true, false);
-				goto update;
-		}else if( code == KeyPress::leftKey ){
-				decayKnob->setValue( decayKnob->getValue() - val, true, false);
-				goto update;
-		}else if( code == KeyPress::rightKey ){
-				decayKnob->setValue( decayKnob->getValue() + val, true, false);
-				goto update;
-
-		}
-	}
-  
-  if( code == '1'){ switchLoop(0); return true;}
-  if( code == '2'){ switchLoop(1); return true;}
-  if( code == '3'){ switchLoop(2); return true;}
-  if( code == '4'){ switchLoop(3); return true;}
-  if( code == '5'){ switchLoop(4); return true;}
-  if( code == '6'){ switchLoop(5); return true;}
-  if( code == '7'){ switchLoop(6); return true;}
-  if( code == '8'){ switchLoop(7); return true;}
-  if( code == '9'){ switchLoop(8); return true;}
-  if( code == '0'){ switchLoop(9); return true;}
-
-
-  return false;  // Return true if your handler uses this key event, or false to allow it to be passed-on.
-  
-update:
-  updateLoop();
-  return true;
-  //[/UserCode_keyPressed]
+    return false;  // Return true if your handler uses this key event, or false to allow it to be passed-on.
+    //[/UserCode_keyPressed]
 }
 
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-
-void RangLoopComponent::play(){
-
-	if( curLoop > loops.size()) return;
-
-  loops[curLoop]->rewind();
-  loops[curLoop]->play();
-
-	//loopB ? playbackPositionB = 0 : playbackPosition = 0;
-	//nowPlaying = true;
-}
-void RangLoopComponent::stop(){
-  if( curLoop > loops.size() ) return;
-	loops[curLoop]->stop();
-}
-
-void RangLoopComponent::toggleRecord(){
-
-	if(!loops[curLoop]->recording){
-		int sampleRate = audioDeviceManager.getCurrentAudioDevice()->getCurrentSampleRate();
-		if( loops[curLoop]->numSamples == 0 ){
-      loops[curLoop]->allocate( sampleRate * 10.f );
-    }else loops[curLoop]->clear();
-
-		recordButton->setToggleState(true,false);
-
-    loops[curLoop]->stop();
-    loops[curLoop]->record();
-
-	}else{
-
-    loops[curLoop]->stop();
-		recordButton->setToggleState(false,false);
-		play();
-	}
-
-}
-void RangLoopComponent::toggleStack(){
-    loops[curLoop]->stack();
-		stackButton->setToggleState(loops[curLoop]->stacking,false);
-}
-void RangLoopComponent::toggleReverse(){
-
-  loops[curLoop]->reverse();
-  reverseButton->setToggleState(loops[curLoop]->reversing,false);
-
-}
-void RangLoopComponent::switchLoop(int index){
-
-	if( loops[curLoop]->recording ) toggleRecord();
-  loopComps[curLoop]->selected = false;
-
-  curLoop = index;
-  
-  Loop* loop = loops[curLoop];
-  
-  decayKnob->setValue( (1.f-loop->decay)*decayKnob->getMaximum(), false );
-  volumeKnob->setValue( loop->gain*volumeKnob->getMaximum(), false );
-  stackButton->setToggleState( loop->stacking, false);
-  reverseButton->setToggleState( loop->reversing, false);
-  loopComps[curLoop]->selected = true;
-
-}
-void RangLoopComponent::updateLoop(){
-  loops[curLoop]->decay = 1 - decayKnob->getValue()/decayKnob->getMaximum();
-  loops[curLoop]->gain = volumeKnob->getValue()/volumeKnob->getMaximum();
-}
-
-void RangLoopComponent::audioDeviceIOCallback (const float** inputChannelData,
-												 int totalNumInputChannels,
-												 float** outputChannelData,
-												 int totalNumOutputChannels,
-												 int numSamples)
-{
-  for (int i = 0; i < totalNumOutputChannels; ++i)
-   if (outputChannelData[i] != 0)
-      zeromem (outputChannelData[i], sizeof (float) * numSamples);
-
-	for(int i=0; i < loops.size(); i++ )
-   loops[i]->audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
-
-  memcpy( outputChannelData[1], outputChannelData[0], numSamples * sizeof(float));
-
-	//for( int i = 0; i < numSamples; i++)
-	//	outputChannelData[0][i] = inputChannelData[0][i];
-
-    // pass the audio callback on to our player source
-	// audioSourcePlayer.audioDeviceIOCallback (inputChannelData, totalNumInputChannels, outputChannelData, totalNumOutputChannels, numSamples);
-
-	/*AudioSourceChannelInfo fileBufInfo =  AudioSourceChannelInfo();
-
-	AudioSampleBuffer fileBuffer = AudioSampleBuffer( outputChannelData, totalNumOutputChannels, numSamples);
-
-	fileBufInfo.buffer = &fileBuffer;
-	fileBufInfo.startSample = 0;
-	fileBufInfo.numSamples = numSamples;
-
-	transportSource.getNextAudioBlock( fileBufInfo);
-
-
-	if( recordFileStream && !stackButton->getToggleState()){
-
-		AudioSampleBuffer inputBuffer = AudioSampleBuffer( (float **)inputChannelData, totalNumInputChannels, numSamples);
-
-		inputBuffer.writeToAudioWriter( recordWriter, 0, numSamples);
-
-		//	fileBuffer.copyFrom( 0,0, inputBuffer, 0, 0, numSamples);
-
-		samplesRecorded += numSamples;
-	}
-
-
-	if( recordFileStream && stackButton->getToggleState()){
-
-		AudioSampleBuffer inputBuffer = AudioSampleBuffer( (float **)inputChannelData, totalNumInputChannels, numSamples);
-
-		inputBuffer.addFromWithRamp(0, 0, fileBuffer.getSampleData(0), numSamples, .9, .9);
-
-		recordFileStream->setPosition(44 + (samplesRecorded % currentAudioFileSource->getTotalLength()));
-		inputBuffer.writeToAudioWriter( recordWriter, 0, numSamples);
-
-		samplesRecorded += numSamples;
-
-	}*/
-}
-
-void RangLoopComponent::audioDeviceAboutToStart (AudioIODevice* device)
-{
-    //audioSourcePlayer.audioDeviceAboutToStart (device);
-}
-
-void RangLoopComponent::audioDeviceStopped()
-{
-    //audioSourcePlayer.audioDeviceStopped();
-}
-
-
-void RangLoopComponent::changeListenerCallback (ChangeBroadcaster *source)
-{
-    // callback from the transport source to tell us that play has
-    // started or stopped, so update our buttons..
-    repaint();
-}
-
-void RangLoopComponent::updatePlaytimeLabel(){
-
-	/*int seconds = transportSource.getNextReadPosition() / currentSampleRate;
-	int minutes = seconds / 60;
-	seconds = seconds % 60;
-	playtimeLabel->setText( String(minutes) + ":" + (seconds > 9 ? (String(seconds)):("0"+String(seconds))) , false );
-	playtimeLabel->setTopLeftPosition( slider->getPositionOfValue(slider->getValue()) - playtimeLabel->getWidth()/2 + slider->getX(), playtimeLabel->getY());*/
-}
-
-void RangLoopComponent::focusOfChildComponentChanged (FocusChangeType cause){
-  
-  Component* comp = getCurrentlyFocusedComponent();
-  for( int i=0; i < loopComps.size(); i++)
-    if(loopComps[i] == comp) switchLoop(i);
-}
-void RangLoopComponent::timerCallback(){
-  
-  for( int i=0; i < loops.size(); i++){
-    loops[i]->rms = loops[i]->b[0].getRMSR( 2048 );
-    //loopComps[i]->repaint();
-  }
-  
-  repaint();
-	/*if( recordFileStream && !stackButton->getToggleState() ) {
-		int seconds = (double)samplesRecorded / recordWriter->getSampleRate();
-		int minutes = seconds / 60;
-		seconds = seconds % 60;
-		durationLabel->setText( String(minutes) + ":" + (seconds > 9 ? (String(seconds)):("0"+String(seconds))) , false);
-
-	}else if( transportSource.isPlaying()){
-		slider->setValue( (float)transportSource.getNextReadPosition() / (float)transportSource.getTotalLength() * 10);
-		updatePlaytimeLabel();
-	}*/
-}
 //[/MiscUserCode]
 
 
@@ -950,7 +597,7 @@ END_JUCER_METADATA
 //==============================================================================
 // Binary resources - be careful not to edit any of these sections!
 
-// JUCER_RESOURCE: ftttmlogorings_gif, 7463, "../../../../../Desktop/ftttmlogorings.gif"
+// JUCER_RESOURCE: ftttmlogorings_gif, 7463, "../../../../../../Desktop/ftttmlogorings.gif"
 static const unsigned char resource_RangLoopComponent_ftttmlogorings_gif[] = { 71,73,70,56,57,97,128,0,128,0,247,0,0,0,0,0,112,111,112,16,25,33,199,213,213,64,60,60,2,16,7,173,173,173,25,0,0,148,148,148,
 204,42,42,34,25,33,25,16,8,87,86,87,193,198,198,0,3,5,213,221,221,212,114,114,8,33,16,36,42,38,230,230,230,10,16,23,18,30,41,51,0,0,129,128,127,165,165,165,40,16,10,8,0,0,9,14,18,188,182,182,209,117,117,
 42,24,33,54,49,49,41,0,0,7,4,6,77,80,80,107,107,107,25,35,48,247,247,247,213,147,147,26,17,23,9,17,8,205,195,195,40,26,17,206,88,88,16,16,16,33,0,0,1,8,3,41,29,39,34,28,38,7,10,14,42,48,44,181,181,181,

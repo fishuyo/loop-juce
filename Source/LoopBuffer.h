@@ -34,6 +34,8 @@ struct LoopBuffer {
   
   void applyGain( float gain, unsigned int numSamples, unsigned int offset );
   
+  float getRMS( unsigned int numSamples, unsigned int offset);
+  float getRMSR( unsigned int numSamples);
 
   //read between b1 and b2, uses smaller value as min
   void setBounds( unsigned int b1, unsigned int b2);
@@ -48,7 +50,7 @@ struct Loop {
   unsigned int numSamples;
   float seconds;
 
-  float gain,decay;
+  float gain,decay,rms;
   bool recording,playing,stacking,reversing,undoing;
 
   Loop();
@@ -63,6 +65,7 @@ struct Loop {
   void stack();
   void reverse();
   void undo();
+  void clear();
   
   void audioIO( float** in, float** out, unsigned int count ); 
   

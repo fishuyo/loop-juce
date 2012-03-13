@@ -1,5 +1,6 @@
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 
 #include "LoopBuffer.h"
 
@@ -39,7 +40,8 @@ float LoopBuffer::operator()(){
   
 //write sample data, appended to buffer
 void LoopBuffer::append( float *in, unsigned int numSamples ){
-  if( curSize + numSamples >= maxSize ) resize(2*maxSize);
+  if( !maxSize ) return;
+  else if( curSize + numSamples >= maxSize ) resize(2*maxSize);
   for( int i=0; i<numSamples; i++)
     samples[curSize+i] = in[i];
   if( rMax == curSize ) rMax += numSamples;
@@ -51,20 +53,20 @@ void LoopBuffer::read( float *out, unsigned int numSamples, float gain=1.f){
   if( rPos < rMin || rPos >= rMax) rPos = rMin;
   int overlap = rPos + numSamples - rMax;
   
-  assert( overlap < (int)(rMax-rMin) );
+  if( overlap >= (int)(rMax-rMin) ) return;
   if(overlap > 0){
     int i;
     for( i = 0; i < numSamples - overlap; i++){
-      out[i] = samples[rPos+i] * gain;
+      out[i] += samples[rPos+i] * gain;
     }
     for( int j = 0; j < overlap; j++){
-      out[i++] = samples[rMin+j] * gain;
+      out[i++] += samples[rMin+j] * gain;
     }
     rPos = overlap;
     
   }else{
     for( int i = 0; i < numSamples; i++){
-      out[i] = samples[rPos+i] * gain;
+      out[i] += samples[rPos+i] * gain;
     }
     rPos += numSamples;
   }
@@ -75,23 +77,23 @@ void LoopBuffer::readR( float *out, unsigned int numSamples, float gain=1.f){
   if( rPos < rMin || rPos >= rMax) rPos = rMax;
   int underlap = rPos - numSamples - rMin;
   
-  assert( underlap > -(int)(rMax-rMin) );
+  if( underlap <= -(int)(rMax-rMin) ) return;
   float *tmp = &samples[rPos];
   
   if(underlap < 0){
     for( int i = 0; i < rPos; i++){
-      out[i] = *(--tmp) * gain;
+      out[i] += *(--tmp) * gain;
     }
     tmp = &samples[rMax];
     for( int i = rPos; i < numSamples; i++){
-      out[i] = *(--tmp) * gain;
+      out[i] += *(--tmp) * gain;
     }
     
     rPos = rMax + underlap;
     
   }else{
     for( int i = 0; i < numSamples; i++){
-      out[i] = *(--tmp) * gain;
+      out[i] += *(--tmp) * gain;
     }
     rPos -= numSamples;
   }
@@ -149,6 +151,27 @@ void LoopBuffer::applyGain( float gain, unsigned int numSamples, unsigned int of
   }
 }
 
+float LoopBuffer::getRMS(unsigned int numSamples, unsigned int offset){
+  if( curSize == 0 ) return 0.f;
+  double sum = 0.0;
+  if( offset < rMin ) offset = rMin;
+  unsigned int i = numSamples;
+  while( i-- ){
+    if(offset >= rMax) offset = rMin;
+    float s = samples[offset++];
+    sum += s*s;    
+  }
+  //return sum / numSamples;
+  return (float) sqrt (sum / numSamples); 
+}
+
+float LoopBuffer::getRMSR(unsigned int numSamples){
+  unsigned int offset = rPos - numSamples;
+  while( offset < 0 ) offset += rMax;
+  
+  return getRMS(numSamples, offset); 
+}
+
 void LoopBuffer::setBounds( unsigned int b1, unsigned int b2=0){
   rMin = b1 < b2 ? b1 : b2;
   rMax = b1 < b2 ? b2 : b1;
@@ -156,8 +179,9 @@ void LoopBuffer::setBounds( unsigned int b1, unsigned int b2=0){
 }
 
 
+
 /*
-* Loop
+ * Loop
 *
 */
 Loop::Loop(){
@@ -167,6 +191,7 @@ Loop::Loop(){
   recording = playing = stacking = undoing = reversing = false;
   gain = 1.0f;
   decay = .5f;
+  rms = 0.f;
 }
 
 Loop::Loop(float num_seconds, unsigned int rate=44100){
@@ -177,6 +202,7 @@ Loop::Loop(float num_seconds, unsigned int rate=44100){
   recording = playing = stacking = undoing = reversing = false;
   gain = 1.0f;
   decay = .5f;
+  rms = 0.f;
 }
 
 void Loop::allocate( unsigned int n ){
@@ -197,6 +223,9 @@ void Loop::reverse(){ reversing = !reversing; }
 void Loop::undo(){
   
 }
+void Loop::clear(){
+  b[0].rMin = b[0].rMax = b[0].rPos = b[0].curSize = 0;
+}
 
 void Loop::audioIO( float** in, float** out, unsigned int count ){
   
@@ -213,21 +242,25 @@ void Loop::audioIO( float** in, float** out, unsigned int count ){
 		if(reversing){
       
       b[0].readR( out[0], count, gain );
-      memcpy( out[1], out[0], count * sizeof(float) );
+      //memcpy( out[1], out[0], count * sizeof(float) );
       
+      //rms = b[0].getRMS( count, b[0].rPos );
 			if(stacking){	
 				b[0].applyGain( decay, count, b[0].rPos );
         b[0].addFromR( in[0], count, lPos );
-			}			
+			}
+			
 		}else {
       
       b[0].read( out[0], count, gain );
-      memcpy( out[1], out[0], count * sizeof(float) );
+      //memcpy( out[1], out[0], count * sizeof(float) );
       
+      //rms = b[0].getRMS(count, lPos);
 			if(stacking){
         b[0].applyGain( decay, count, lPos);
         b[0].addFrom( in[0], count, lPos );
 			}			
+      
 			
 		}
   }
