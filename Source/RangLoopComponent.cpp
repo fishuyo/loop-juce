@@ -195,18 +195,18 @@ RangLoopComponent::RangLoopComponent ()
     addAndMakeVisible (loopComp2 = new LoopComponent("2"));
     addAndMakeVisible (loopComp3 = new LoopComponent("3"));
     addAndMakeVisible (loopComp4 = new LoopComponent("4"));
-    addAndMakeVisible (loopComp5 = new LoopComponent("5"));
-    addAndMakeVisible (loopComp6 = new LoopComponent("6"));
-    addAndMakeVisible (loopComp7 = new LoopComponent("7"));
-    addAndMakeVisible (loopComp8 = new LoopComponent("8"));
-    addAndMakeVisible (loopComp9 = new LoopComponent("9"));
-    addAndMakeVisible (loopComp10 = new LoopComponent("10"));
-    addAndMakeVisible (loopComp11 = new LoopComponent("11"));
-    addAndMakeVisible (loopComp12 = new LoopComponent("12"));
-    addAndMakeVisible (loopComp13 = new LoopComponent("13"));
-    addAndMakeVisible (loopComp14 = new LoopComponent("14"));
-    addAndMakeVisible (loopComp15 = new LoopComponent("15"));
-    addAndMakeVisible (loopComp16 = new LoopComponent("16"));
+    addAndMakeVisible (loopComp5 = new LoopComponent("Q"));
+    addAndMakeVisible (loopComp6 = new LoopComponent("W"));
+    addAndMakeVisible (loopComp7 = new LoopComponent("E"));
+    addAndMakeVisible (loopComp8 = new LoopComponent("R"));
+    addAndMakeVisible (loopComp9 = new LoopComponent("A"));
+    addAndMakeVisible (loopComp10 = new LoopComponent("S"));
+    addAndMakeVisible (loopComp11 = new LoopComponent("D"));
+    addAndMakeVisible (loopComp12 = new LoopComponent("F"));
+    addAndMakeVisible (loopComp13 = new LoopComponent("Z"));
+    addAndMakeVisible (loopComp14 = new LoopComponent("X"));
+    addAndMakeVisible (loopComp15 = new LoopComponent("C"));
+    addAndMakeVisible (loopComp16 = new LoopComponent("V"));
     addAndMakeVisible (groupComponent = new GroupComponent (L"Loops",
                                                             L"Loops"));
     groupComponent->setColour (GroupComponent::outlineColourId, Colour (0x66812b2b));
@@ -256,11 +256,6 @@ RangLoopComponent::RangLoopComponent ()
 	recorder = new AudioRecorder();
   this->startTimer( 33 );
 
-	nowPlaying = false;
-	nowRecording = false;
-	nowStacking = false;
-	nowSpeeding = false;
-	nowReversing = false;
   curLoop = 0;
   
   loops.push_back( &loopComp1->loop );loopComps.push_back( loopComp1 );
@@ -561,7 +556,7 @@ bool RangLoopComponent::keyPressed (const KeyPress& key)
 		return true;
 
 	}else if( code == KeyPress::spaceKey ){
-			if( loops[curLoop]->playing )  toggleRecord();
+			if( !loops[curLoop]->playing )  toggleRecord();
 			else toggleStack();
 			return true;
 	}
@@ -587,12 +582,19 @@ bool RangLoopComponent::keyPressed (const KeyPress& key)
   if( code == '2'){ switchLoop(1); return true;}
   if( code == '3'){ switchLoop(2); return true;}
   if( code == '4'){ switchLoop(3); return true;}
-  if( code == '5'){ switchLoop(4); return true;}
-  if( code == '6'){ switchLoop(5); return true;}
-  if( code == '7'){ switchLoop(6); return true;}
-  if( code == '8'){ switchLoop(7); return true;}
-  if( code == '9'){ switchLoop(8); return true;}
-  if( code == '0'){ switchLoop(9); return true;}
+  if( code == 'Q'){ switchLoop(4); return true;}
+  if( code == 'W'){ switchLoop(5); return true;}
+  if( code == 'E'){ switchLoop(6); return true;}
+  if( code == 'R'){ switchLoop(7); return true;}
+  if( code == 'A'){ switchLoop(8); return true;}
+  if( code == 'S'){ switchLoop(9); return true;}
+  if( code == 'D'){ switchLoop(10); return true;}
+  if( code == 'F'){ switchLoop(11); return true;}
+  if( code == 'Z'){ switchLoop(12); return true;}
+  if( code == 'X'){ switchLoop(13); return true;}
+  if( code == 'C'){ switchLoop(14); return true;}
+  if( code == 'V'){ switchLoop(15); return true;}
+
 
 
   return false;  // Return true if your handler uses this key event, or false to allow it to be passed-on.
@@ -654,6 +656,8 @@ void RangLoopComponent::toggleReverse(){
 
 }
 void RangLoopComponent::switchLoop(int index){
+  
+  if( index == curLoop ) loops[curLoop]->playing = !loops[curLoop]->playing && loops[curLoop]->numSamples;
 
 	if( loops[curLoop]->recording ) toggleRecord();
   loopComps[curLoop]->selected = false;
@@ -687,7 +691,7 @@ void RangLoopComponent::audioDeviceIOCallback (const float** inputChannelData,
 	for(int i=0; i < loops.size(); i++ )
    loops[i]->audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
 
-  memcpy( outputChannelData[1], outputChannelData[0], numSamples * sizeof(float));
+  //memcpy( outputChannelData[1], outputChannelData[0], numSamples * sizeof(float));
 
 	//for( int i = 0; i < numSamples; i++)
 	//	outputChannelData[0][i] = inputChannelData[0][i];

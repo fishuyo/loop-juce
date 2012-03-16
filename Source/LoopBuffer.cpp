@@ -57,16 +57,16 @@ void LoopBuffer::read( float *out, unsigned int numSamples, float gain=1.f){
   if(overlap > 0){
     int i;
     for( i = 0; i < numSamples - overlap; i++){
-      out[i] += samples[rPos+i] * gain;
+      out[i] = samples[rPos+i] * gain;
     }
     for( int j = 0; j < overlap; j++){
-      out[i++] += samples[rMin+j] * gain;
+      out[i++] = samples[rMin+j] * gain;
     }
     rPos = overlap;
     
   }else{
     for( int i = 0; i < numSamples; i++){
-      out[i] += samples[rPos+i] * gain;
+      out[i] = samples[rPos+i] * gain;
     }
     rPos += numSamples;
   }
@@ -82,18 +82,18 @@ void LoopBuffer::readR( float *out, unsigned int numSamples, float gain=1.f){
   
   if(underlap < 0){
     for( int i = 0; i < rPos; i++){
-      out[i] += *(--tmp) * gain;
+      out[i] = *(--tmp) * gain;
     }
     tmp = &samples[rMax];
     for( int i = rPos; i < numSamples; i++){
-      out[i] += *(--tmp) * gain;
+      out[i] = *(--tmp) * gain;
     }
     
     rPos = rMax + underlap;
     
   }else{
     for( int i = 0; i < numSamples; i++){
-      out[i] += *(--tmp) * gain;
+      out[i] = *(--tmp) * gain;
     }
     rPos -= numSamples;
   }
@@ -190,8 +190,10 @@ Loop::Loop(){
   sampleRate = 44100;
   recording = playing = stacking = undoing = reversing = false;
   gain = 1.0f;
+  pan = .5f;
   decay = .5f;
   rms = 0.f;
+  iobuffer = 0;
 }
 
 Loop::Loop(float num_seconds, unsigned int rate=44100){
@@ -201,8 +203,14 @@ Loop::Loop(float num_seconds, unsigned int rate=44100){
   sampleRate = rate;
   recording = playing = stacking = undoing = reversing = false;
   gain = 1.0f;
+  pan = .5f;
   decay = .5f;
   rms = 0.f;
+  iobuffer = 0;
+}
+
+Loop::~Loop(){
+  if(iobuffer) delete[] iobuffer;
 }
 
 void Loop::allocate( unsigned int n ){
@@ -210,6 +218,7 @@ void Loop::allocate( unsigned int n ){
   b[1].resize(n);
   numSamples=n;
   seconds = n * 1.0f / (1.0f * sampleRate);
+  iobuffer = new float[1024]; //TODO should adjust if change in blocksize
 }
 
 void Loop::play(){ playing = true; }
@@ -230,21 +239,21 @@ void Loop::clear(){
 void Loop::audioIO( float** in, float** out, unsigned int count ){
   
   unsigned int lPos=0;
+  float l = (1.f - pan );
+  float r = pan;
   
   if(recording){ //fresh loop
 
     b[0].append( in[0], count );
 		
-	}else if(playing){ //playback and stack
+	}else if(playing && numSamples > 0){ //playback and stack
 		
     lPos = b[0].rPos;
 		
 		if(reversing){
       
-      b[0].readR( out[0], count, gain );
-      //memcpy( out[1], out[0], count * sizeof(float) );
+      b[0].readR( iobuffer, count, gain );
       
-      //rms = b[0].getRMS( count, b[0].rPos );
 			if(stacking){	
 				b[0].applyGain( decay, count, b[0].rPos );
         b[0].addFromR( in[0], count, lPos );
@@ -252,16 +261,20 @@ void Loop::audioIO( float** in, float** out, unsigned int count ){
 			
 		}else {
       
-      b[0].read( out[0], count, gain );
-      //memcpy( out[1], out[0], count * sizeof(float) );
+      b[0].read( iobuffer, count, gain );
       
-      //rms = b[0].getRMS(count, lPos);
 			if(stacking){
         b[0].applyGain( decay, count, lPos);
         b[0].addFrom( in[0], count, lPos );
 			}			
-      
-			
 		}
-  }
+    
+    //up mix to 2 channels
+    for( int i=0; i < count; i++){
+      out[0][i] += iobuffer[i] * l;
+      out[1][i] += iobuffer[i] * r;
+    }
+    
+  }//end else if(playing)
+
 }  

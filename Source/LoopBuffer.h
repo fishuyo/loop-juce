@@ -50,11 +50,13 @@ struct Loop {
   unsigned int numSamples;
   float seconds;
 
-  float gain,decay,rms;
+  float gain, pan, decay, rms;
   bool recording,playing,stacking,reversing,undoing;
+  float *iobuffer;
 
   Loop();
   Loop(float num_seconds, unsigned int rate);
+  ~Loop();
   
   void allocate( unsigned int n );
   

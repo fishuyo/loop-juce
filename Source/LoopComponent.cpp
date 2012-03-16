@@ -67,7 +67,8 @@ void LoopComponent::paint (Graphics& g)
   float rms = loop.rms*20.f;
   if(rms > 1.f ) rms = 1.f;
   float thick = 2.0f + 5.f*rms*loop.gain;
-  int h = loop.gain * 6;
+  int h = loop.gain * 12;
+  int h2 = (1.f-loop.decay) * 18;
 
   Colour c,c2,c3;
   if( loop.numSamples != 0 ){
@@ -95,26 +96,31 @@ void LoopComponent::paint (Graphics& g)
 
     g.setColour (c3);
     g.setFont (Font (Font::getDefaultMonospacedFontName(), 9.6000f, Font::bold));
-    g.drawText (L"15",
+    g.drawText (ident,
                 20, 20, 10, 10,
                 Justification::centred, true);
 
-    g.setColour (Colour (0xa03aac3e));
-    g.fillRect (10, 35, 30, 2);
+    //g.setColour (Colour (0xa03aac3e));
+    //g.fillRect (10, 35, 30, 2);
 
-    g.setColour (Colour (0xff2a74a5));
-    g.fillRect (39, 28-h, 2, h);
+    if( h < 18 ) g.setColour (Colour (0xff2a74a5));
+    else g.setColour( Colour(200,70,70) );
+    g.fillRect (40, 42-h, 2, h);
 
   if( loop.recording || loop.stacking ){
     g.setColour (Colour (0xffb33f3f));
     g.fillEllipse (10.0f, 10.0f, 4.0f, 4.0f);
+  }else if( !loop.playing && loop.numSamples ){
+    g.setColour( Colour(10, 70, 70) );
+    g.fillRect( 10.f,10.f, 1.f, 4.f);
+    g.fillRect( 12.f, 10.f, 1.f, 4.f);
   }
 
     g.setColour (Colour (0xff2a74a5));
-    g.fillRect (35, 10, 2, 18);
+    g.fillRect (36, 42-h2, 2, h2);
 
-    g.setColour (Colour (0xff2a6ba5));
-    g.fillRect (10, 39, 30, 2);
+    //g.setColour (Colour (0xff2a6ba5));
+    //g.fillRect (10, 39, 30, 2);
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
