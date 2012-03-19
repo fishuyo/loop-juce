@@ -301,7 +301,9 @@ RangLoopComponent::RangLoopComponent ()
       audioDeviceManager.addAudioCallback (audioOutDispComp);
 	}
 
+  switchLoop(0);
   this->toFront(true);
+  this->grabKeyboardFocus();
     //[/Constructor]
 }
 
