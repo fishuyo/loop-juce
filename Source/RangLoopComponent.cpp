@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  12 Mar 2012 1:10:46pm
+  Creation date:  18 Mar 2012 11:57:19pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -32,15 +32,13 @@
 
 //==============================================================================
 RangLoopComponent::RangLoopComponent ()
-    : groupComponent2 (0),
+    : audioInDispComp (0),
+      groupComponent2 (0),
       groupComponent3 (0),
       recordButton (0),
-      switchButton (0),
       reverseButton (0),
       stackButton (0),
       slider (0),
-      durationLabel (0),
-      playtimeLabel (0),
       volumeKnob (0),
       label3 (0),
       decayKnob (0),
@@ -49,7 +47,6 @@ RangLoopComponent::RangLoopComponent ()
       label4 (0),
       deviceButton (0),
       loopComp1 (0),
-      audioInDispComp (0),
       audioOutDispComp (0),
       loopComp2 (0),
       loopComp3 (0),
@@ -69,9 +66,23 @@ RangLoopComponent::RangLoopComponent ()
       groupComponent (0),
       masterKnob (0),
       label5 (0),
+      panKnob (0),
+      label6 (0),
+      playpauseButton (0),
+      savesessionButton (0),
+      loadsessionButton (0),
+      saveloopButton (0),
+      loadloopButton (0),
+      recordsessionButton (0),
+      modeCombo (0),
+      label7 (0),
+      masterToggle (0),
+      recordoutButton (0),
       cachedImage_ftttmlogorings_gif (0)
 {
-  {
+    addAndMakeVisible (audioInDispComp = new LiveAudioDisplayComp());
+    audioInDispComp->setName (L"Audio Input Display");
+
     addAndMakeVisible (groupComponent2 = new GroupComponent (L"new group",
                                                              L"Loop Controls"));
     groupComponent2->setColour (GroupComponent::outlineColourId, Colour (0x66812b2b));
@@ -87,12 +98,6 @@ RangLoopComponent::RangLoopComponent ()
     recordButton->addListener (this);
     recordButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
     recordButton->setColour (TextButton::buttonOnColourId, Colours::green);
-
-    addAndMakeVisible (switchButton = new TextButton (L"switch"));
-    switchButton->setButtonText (L"A / B");
-    switchButton->addListener (this);
-    switchButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
-    switchButton->setColour (TextButton::buttonOnColourId, Colours::green);
 
     addAndMakeVisible (reverseButton = new TextButton (L"reverse"));
     reverseButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight);
@@ -113,24 +118,6 @@ RangLoopComponent::RangLoopComponent ()
     slider->setColour (Slider::thumbColourId, Colour (0xff6be171));
     slider->setColour (Slider::rotarySliderFillColourId, Colour (0xff6be171));
     slider->addListener (this);
-
-    addAndMakeVisible (durationLabel = new Label (L"durationLabel",
-                                                  L"0:00"));
-    durationLabel->setFont (Font (10.0000f, Font::bold));
-    durationLabel->setJustificationType (Justification::centred);
-    durationLabel->setEditable (false, false, false);
-    durationLabel->setColour (Label::textColourId, Colour (0xff6be171));
-    durationLabel->setColour (TextEditor::textColourId, Colours::black);
-    durationLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
-
-    addAndMakeVisible (playtimeLabel = new Label (L"playtime",
-                                                  L"0:00"));
-    playtimeLabel->setFont (Font (10.0000f, Font::plain));
-    playtimeLabel->setJustificationType (Justification::centred);
-    playtimeLabel->setEditable (false, false, false);
-    playtimeLabel->setColour (Label::textColourId, Colour (0xff6be171));
-    playtimeLabel->setColour (TextEditor::textColourId, Colours::black);
-    playtimeLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
     addAndMakeVisible (volumeKnob = new Slider (L"volumeKnob"));
     volumeKnob->setRange (0, 10, 0);
@@ -186,27 +173,24 @@ RangLoopComponent::RangLoopComponent ()
     deviceButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
 
     addAndMakeVisible (loopComp1 = new LoopComponent("1"));
-    addAndMakeVisible (audioInDispComp = new LiveAudioDisplayComp());
-    audioInDispComp->setName (L"Audio Input Display");
-
     addAndMakeVisible (audioOutDispComp = new LiveAudioDisplayComp());
     audioOutDispComp->setName (L"Audio Output Display");
 
-    addAndMakeVisible (loopComp2 = new LoopComponent("2"));
-    addAndMakeVisible (loopComp3 = new LoopComponent("3"));
-    addAndMakeVisible (loopComp4 = new LoopComponent("4"));
-    addAndMakeVisible (loopComp5 = new LoopComponent("Q"));
-    addAndMakeVisible (loopComp6 = new LoopComponent("W"));
-    addAndMakeVisible (loopComp7 = new LoopComponent("E"));
-    addAndMakeVisible (loopComp8 = new LoopComponent("R"));
-    addAndMakeVisible (loopComp9 = new LoopComponent("A"));
-    addAndMakeVisible (loopComp10 = new LoopComponent("S"));
-    addAndMakeVisible (loopComp11 = new LoopComponent("D"));
-    addAndMakeVisible (loopComp12 = new LoopComponent("F"));
-    addAndMakeVisible (loopComp13 = new LoopComponent("Z"));
-    addAndMakeVisible (loopComp14 = new LoopComponent("X"));
-    addAndMakeVisible (loopComp15 = new LoopComponent("C"));
-    addAndMakeVisible (loopComp16 = new LoopComponent("V"));
+  addAndMakeVisible (loopComp2 = new LoopComponent("2"));
+  addAndMakeVisible (loopComp3 = new LoopComponent("3"));
+  addAndMakeVisible (loopComp4 = new LoopComponent("4"));
+  addAndMakeVisible (loopComp5 = new LoopComponent("Q"));
+  addAndMakeVisible (loopComp6 = new LoopComponent("W"));
+  addAndMakeVisible (loopComp7 = new LoopComponent("E"));
+  addAndMakeVisible (loopComp8 = new LoopComponent("R"));
+  addAndMakeVisible (loopComp9 = new LoopComponent("A"));
+  addAndMakeVisible (loopComp10 = new LoopComponent("S"));
+  addAndMakeVisible (loopComp11 = new LoopComponent("D"));
+  addAndMakeVisible (loopComp12 = new LoopComponent("F"));
+  addAndMakeVisible (loopComp13 = new LoopComponent("Z"));
+  addAndMakeVisible (loopComp14 = new LoopComponent("X"));
+  addAndMakeVisible (loopComp15 = new LoopComponent("C"));
+  addAndMakeVisible (loopComp16 = new LoopComponent("V"));
     addAndMakeVisible (groupComponent = new GroupComponent (L"Loops",
                                                             L"Loops"));
     groupComponent->setColour (GroupComponent::outlineColourId, Colour (0x66812b2b));
@@ -228,36 +212,126 @@ RangLoopComponent::RangLoopComponent ()
     label5->setColour (TextEditor::textColourId, Colours::black);
     label5->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
+    addAndMakeVisible (panKnob = new Slider (L"decayKnob"));
+    panKnob->setRange (0, 10, 0);
+    panKnob->setSliderStyle (Slider::Rotary);
+    panKnob->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+    panKnob->setColour (Slider::rotarySliderFillColourId, Colour (0xff6be171));
+    panKnob->addListener (this);
+
+    addAndMakeVisible (label6 = new Label (L"new label",
+                                           L"pan"));
+    label6->setFont (Font (11.0000f, Font::plain));
+    label6->setJustificationType (Justification::centred);
+    label6->setEditable (false, false, false);
+    label6->setColour (Label::textColourId, Colour (0xff6be171));
+    label6->setColour (TextEditor::textColourId, Colours::black);
+    label6->setColour (TextEditor::backgroundColourId, Colour (0x0));
+
+    addAndMakeVisible (playpauseButton = new TextButton (L"playpauseButton"));
+    playpauseButton->setButtonText (L"|> / ||");
+    playpauseButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight);
+    playpauseButton->addListener (this);
+    playpauseButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
+    playpauseButton->setColour (TextButton::buttonOnColourId, Colours::green);
+
+    addAndMakeVisible (savesessionButton = new TextButton (L"savesession"));
+    savesessionButton->setButtonText (L"save session");
+    savesessionButton->setConnectedEdges (Button::ConnectedOnLeft | Button::ConnectedOnRight);
+    savesessionButton->addListener (this);
+    savesessionButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
+
+    addAndMakeVisible (loadsessionButton = new TextButton (L"loadsession"));
+    loadsessionButton->setButtonText (L"load session");
+    loadsessionButton->setConnectedEdges (Button::ConnectedOnLeft);
+    loadsessionButton->addListener (this);
+    loadsessionButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
+
+    addAndMakeVisible (saveloopButton = new TextButton (L"saveloop"));
+    saveloopButton->setButtonText (L"save loop");
+    saveloopButton->setConnectedEdges (Button::ConnectedOnRight);
+    saveloopButton->addListener (this);
+    saveloopButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
+
+    addAndMakeVisible (loadloopButton = new TextButton (L"loadloop"));
+    loadloopButton->setButtonText (L"load loop");
+    loadloopButton->setConnectedEdges (Button::ConnectedOnLeft);
+    loadloopButton->addListener (this);
+    loadloopButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
+
+    addAndMakeVisible (recordsessionButton = new TextButton (L"recordsession"));
+    recordsessionButton->setButtonText (L"record session");
+    recordsessionButton->setConnectedEdges (Button::ConnectedOnRight);
+    recordsessionButton->addListener (this);
+    recordsessionButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
+    recordsessionButton->setColour (TextButton::buttonOnColourId, Colours::green);
+
+    addAndMakeVisible (modeCombo = new ComboBox (L"mode"));
+    modeCombo->setEditableText (false);
+    modeCombo->setJustificationType (Justification::centredLeft);
+    modeCombo->setTextWhenNothingSelected (L"free");
+    modeCombo->setTextWhenNoChoicesAvailable (L"(no choices)");
+    modeCombo->addItem (L"free", 1);
+    modeCombo->addItem (L"synchronized", 2);
+    modeCombo->addItem (L"sequenced", 3);
+    modeCombo->addListener (this);
+
+    addAndMakeVisible (label7 = new Label (L"new label",
+                                           L"mode"));
+    label7->setFont (Font (11.0000f, Font::plain));
+    label7->setJustificationType (Justification::centredLeft);
+    label7->setEditable (false, false, false);
+    label7->setColour (Label::textColourId, Colour (0xff6be171));
+    label7->setColour (TextEditor::textColourId, Colours::black);
+    label7->setColour (TextEditor::backgroundColourId, Colour (0x0));
+
+    addAndMakeVisible (masterToggle = new ToggleButton (L"mastertoggle"));
+    masterToggle->setButtonText (L"master");
+    masterToggle->addListener (this);
+    masterToggle->setColour (ToggleButton::textColourId, Colour (0xff6be171));
+
+    addAndMakeVisible (recordoutButton = new TextButton (L"recordout"));
+    recordoutButton->setButtonText (L"record from output");
+    recordoutButton->addListener (this);
+    recordoutButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
+    recordoutButton->setColour (TextButton::buttonOnColourId, Colours::green);
+
     cachedImage_ftttmlogorings_gif = ImageCache::getFromMemory (ftttmlogorings_gif, ftttmlogorings_gifSize);
-  }
+
     //[UserPreSize]
 	this->setWantsKeyboardFocus(true);
 
 	recordButton->setClickingTogglesState(true);
-	switchButton->setClickingTogglesState(true);
 	stackButton->setClickingTogglesState(true);
 	reverseButton->setClickingTogglesState(true);
-	//speedButton->setClickingTogglesState(true);
-
+	loadloopButton->setClickingTogglesState(false);
+    saveloopButton->setClickingTogglesState(false);
+    savesessionButton->setClickingTogglesState(false);
+    loadsessionButton->setClickingTogglesState(false);
+    
+    masterKnob->setValue( 8.0, false, false);
 	volumeKnob->setValue(8.0, false, false);
+    panKnob->setValue( 5.0, false, false);
 	decayKnob->setValue(3.0, false, false);
 	speedKnob->setValue(5.0, false, false);
+  
 
 	//deviceSelector = new AudioDeviceSelectorComponent (audioDeviceManager, 0, 2, 0, 2, true, true, true, false);
 
 	audioOutDispComp->setDisplayOutput(true);
     //[/UserPreSize]
 
-    setSize (600, 400);
+    setSize (550, 400);
 
 
     //[Constructor] You can add your own custom stuff here..
 	// and initialise the device manager with no settings so that it picks a default device to use.
+  
 	recorder = new AudioRecorder();
   this->startTimer( 33 );
 
   curLoop = 0;
-  
+
   loops.push_back( &loopComp1->loop );loopComps.push_back( loopComp1 );
   loops.push_back( &loopComp2->loop );loopComps.push_back( loopComp2 );
   loops.push_back( &loopComp3->loop );loopComps.push_back( loopComp3 );
@@ -310,23 +384,23 @@ RangLoopComponent::RangLoopComponent ()
 RangLoopComponent::~RangLoopComponent()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
-	audioDeviceManager.removeAudioCallback (recorder);
+	//audioDeviceManager.removeAudioCallback (recorder);
+  audioDeviceManager.removeAudioCallback( this );
     audioDeviceManager.removeAudioCallback (audioInDispComp);
 	audioDeviceManager.removeAudioCallback (audioOutDispComp);
     recorder = 0;
+  //audioDeviceManager.stopDevice();
 
 	//deleteAndZero(deviceSelector);
     //[/Destructor_pre]
 
+    deleteAndZero (audioInDispComp);
     deleteAndZero (groupComponent2);
     deleteAndZero (groupComponent3);
     deleteAndZero (recordButton);
-    deleteAndZero (switchButton);
     deleteAndZero (reverseButton);
     deleteAndZero (stackButton);
     deleteAndZero (slider);
-    deleteAndZero (durationLabel);
-    deleteAndZero (playtimeLabel);
     deleteAndZero (volumeKnob);
     deleteAndZero (label3);
     deleteAndZero (decayKnob);
@@ -335,7 +409,6 @@ RangLoopComponent::~RangLoopComponent()
     deleteAndZero (label4);
     deleteAndZero (deviceButton);
     deleteAndZero (loopComp1);
-    deleteAndZero (audioInDispComp);
     deleteAndZero (audioOutDispComp);
     deleteAndZero (loopComp2);
     deleteAndZero (loopComp3);
@@ -355,6 +428,18 @@ RangLoopComponent::~RangLoopComponent()
     deleteAndZero (groupComponent);
     deleteAndZero (masterKnob);
     deleteAndZero (label5);
+    deleteAndZero (panKnob);
+    deleteAndZero (label6);
+    deleteAndZero (playpauseButton);
+    deleteAndZero (savesessionButton);
+    deleteAndZero (loadsessionButton);
+    deleteAndZero (saveloopButton);
+    deleteAndZero (loadloopButton);
+    deleteAndZero (recordsessionButton);
+    deleteAndZero (modeCombo);
+    deleteAndZero (label7);
+    deleteAndZero (masterToggle);
+    deleteAndZero (recordoutButton);
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -372,7 +457,7 @@ void RangLoopComponent::paint (Graphics& g)
 
     g.setColour (Colours::black.withAlpha (0.1950f));
     g.drawImage (cachedImage_ftttmlogorings_gif,
-                 196, 396, 128, 128,
+                 450, 124, 128, 128,
                  0, 0, cachedImage_ftttmlogorings_gif.getWidth(), cachedImage_ftttmlogorings_gif.getHeight());
 
     //[UserPaint] Add your own custom painting code here..
@@ -381,24 +466,21 @@ void RangLoopComponent::paint (Graphics& g)
 
 void RangLoopComponent::resized()
 {
-    groupComponent2->setBounds (248, 168, 256, 136);
+    audioInDispComp->setBounds (4, 4, proportionOfWidth (0.9804f), 64);
+    groupComponent2->setBounds (248, 168, 256, 146);
     groupComponent3->setBounds (248, 64, 256, 104);
-    recordButton->setBounds (312, 264, 56, 16);
-    switchButton->setBounds (416, 184, 72, 24);
-    reverseButton->setBounds (368, 264, 56, 16);
-    stackButton->setBounds (424, 264, 64, 16);
+    recordButton->setBounds (260, 256, 56, 16);
+    reverseButton->setBounds (372, 256, 56, 16);
+    stackButton->setBounds (428, 256, 64, 16);
     slider->setBounds (256, 232, 240, 8);
-    durationLabel->setBounds (432, 128, 48, 24);
-    playtimeLabel->setBounds (400, 128, 48, 24);
-    volumeKnob->setBounds (256, 183, 40, 24);
+    volumeKnob->setBounds (256, 184, 40, 24);
     label3->setBounds (256, 208, 39, 16);
-    decayKnob->setBounds (364, 183, 40, 24);
-    label2->setBounds (368, 200, 39, 23);
-    speedKnob->setBounds (328, 184, 40, 24);
-    label4->setBounds (328, 200, 39, 24);
-    deviceButton->setBounds (392, 72, 104, 24);
+    decayKnob->setBounds (324, 184, 40, 24);
+    label2->setBounds (327, 208, 39, 16);
+    speedKnob->setBounds (364, 184, 40, 24);
+    label4->setBounds (365, 208, 39, 16);
+    deviceButton->setBounds (416, 88, 80, 16);
     loopComp1->setBounds (8, 80, 50, 50);
-    audioInDispComp->setBounds (4, 4, proportionOfWidth (0.9800f), 64);
     audioOutDispComp->setBounds (8, 320, proportionOfWidth (0.9804f), 64);
     loopComp2->setBounds (64, 80, 50, 50);
     loopComp3->setBounds (120, 80, 50, 50);
@@ -416,8 +498,20 @@ void RangLoopComponent::resized()
     loopComp15->setBounds (120, 248, 50, 50);
     loopComp16->setBounds (176, 248, 50, 50);
     groupComponent->setBounds (0, 64, 240, 250);
-    masterKnob->setBounds (256, 87, 40, 24);
-    label5->setBounds (256, 112, 39, 16);
+    masterKnob->setBounds (256, 85, 40, 24);
+    label5->setBounds (256, 108, 39, 16);
+    panKnob->setBounds (290, 184, 40, 24);
+    label6->setBounds (290, 208, 39, 16);
+    playpauseButton->setBounds (316, 256, 56, 16);
+    savesessionButton->setBounds (376, 138, 60, 16);
+    loadsessionButton->setBounds (436, 138, 60, 16);
+    saveloopButton->setBounds (371, 288, 60, 16);
+    loadloopButton->setBounds (431, 288, 60, 16);
+    recordsessionButton->setBounds (316, 138, 60, 16);
+    modeCombo->setBounds (312, 88, 88, 14);
+    label7->setBounds (330, 106, 39, 16);
+    masterToggle->setBounds (416, 200, 64, 16);
+    recordoutButton->setBounds (260, 287, 72, 16);
     //[UserResized] Add your own custom resize handling here..
 	//liveAudioInDisplayComp->setBounds (8, 4, getWidth() - 16, 64);
 	//liveAudioOutDisplayComp->setBounds (8, 208, getWidth() - 16, 64);
@@ -435,12 +529,6 @@ void RangLoopComponent::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_recordButton] -- add your button handler code here..
 		toggleRecord();
         //[/UserButtonCode_recordButton]
-    }
-    else if (buttonThatWasClicked == switchButton)
-    {
-        //[UserButtonCode_switchButton] -- add your button handler code here..
-		//switchLoop();
-        //[/UserButtonCode_switchButton]
     }
     else if (buttonThatWasClicked == reverseButton)
     {
@@ -467,6 +555,62 @@ void RangLoopComponent::buttonClicked (Button* buttonThatWasClicked)
 		deleteAndZero(ds);
         //[/UserButtonCode_deviceButton]
     }
+    else if (buttonThatWasClicked == playpauseButton)
+    {
+        //[UserButtonCode_playpauseButton] -- add your button handler code here..
+      if( loops[curLoop]->playing ) stop();
+      else play();
+        //[/UserButtonCode_playpauseButton]
+    }
+    else if (buttonThatWasClicked == savesessionButton)
+    {
+        //[UserButtonCode_savesessionButton] -- add your button handler code here..
+        //[/UserButtonCode_savesessionButton]
+    }
+    else if (buttonThatWasClicked == loadsessionButton)
+    {
+        //[UserButtonCode_loadsessionButton] -- add your button handler code here..
+        //[/UserButtonCode_loadsessionButton]
+    }
+    else if (buttonThatWasClicked == saveloopButton)
+    {
+        //[UserButtonCode_saveloopButton] -- add your button handler code here..
+        //[/UserButtonCode_saveloopButton]
+    }
+    else if (buttonThatWasClicked == loadloopButton)
+    {
+        //[UserButtonCode_loadloopButton] -- add your button handler code here..
+        
+        AudioFormatManager formatManager;
+        formatManager.registerBasicFormats();
+        
+        //ScopedPointer<AudioFormatReader> reader = formatManager.createReaderFor (audioFile);
+        
+        //if (reader != 0){
+            
+        //}
+
+        //[/UserButtonCode_loadloopButton]
+    }
+    else if (buttonThatWasClicked == recordsessionButton)
+    {
+        //[UserButtonCode_recordsessionButton] -- add your button handler code here..
+        if( !recorder->isRecording() ) recorder->startRecording( File("~/Desktop/loop.wav" ) );
+        else recorder->stop();
+        recordsessionButton->setToggleState(!recordsessionButton->getToggleState(),false);
+        //[/UserButtonCode_recordsessionButton]
+    }
+    else if (buttonThatWasClicked == masterToggle)
+    {
+        //[UserButtonCode_masterToggle] -- add your button handler code here..
+        //[/UserButtonCode_masterToggle]
+    }
+    else if (buttonThatWasClicked == recordoutButton)
+    {
+        //[UserButtonCode_recordoutButton] -- add your button handler code here..
+        recordoutButton->setToggleState( !recordoutButton->getToggleState(), false);
+        //[/UserButtonCode_recordoutButton]
+    }
 
     //[UserbuttonClicked_Post]
     //[/UserbuttonClicked_Post]
@@ -480,32 +624,65 @@ void RangLoopComponent::sliderValueChanged (Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == slider)
     {
         //[UserSliderCode_slider] -- add your slider handling code here..
+        float min = slider->getMinValue() / slider->getMaximum();
+        float max = slider->getMaxValue() / slider->getMaximum();
+        //float pos = slider->getValue() / slider->getMaximum();
+        Loop* loop = loops[curLoop];
+        
+        loop->b[0].rMin = min * loop->b[0].curSize;
+        loop->b[0].rMax = max * loop->b[0].curSize;
+        //loop->b[0].rPos = pos * loop->b[0].curSize;
+        
         //[/UserSliderCode_slider]
     }
     else if (sliderThatWasMoved == volumeKnob)
     {
         //[UserSliderCode_volumeKnob] -- add your slider handling code here..
+            updateLoop();
         //[/UserSliderCode_volumeKnob]
     }
     else if (sliderThatWasMoved == decayKnob)
     {
         //[UserSliderCode_decayKnob] -- add your slider handling code here..
+            updateLoop();
         //[/UserSliderCode_decayKnob]
     }
     else if (sliderThatWasMoved == speedKnob)
     {
         //[UserSliderCode_speedKnob] -- add your slider handling code here..
+            updateLoop();
         //[/UserSliderCode_speedKnob]
     }
     else if (sliderThatWasMoved == masterKnob)
     {
         //[UserSliderCode_masterKnob] -- add your slider handling code here..
+            updateLoop();
         //[/UserSliderCode_masterKnob]
+    }
+    else if (sliderThatWasMoved == panKnob)
+    {
+        //[UserSliderCode_panKnob] -- add your slider handling code here..
+            updateLoop();
+        //[/UserSliderCode_panKnob]
     }
 
     //[UsersliderValueChanged_Post]
-    updateLoop();
     //[/UsersliderValueChanged_Post]
+}
+
+void RangLoopComponent::comboBoxChanged (ComboBox* comboBoxThatHasChanged)
+{
+    //[UsercomboBoxChanged_Pre]
+    //[/UsercomboBoxChanged_Pre]
+
+    if (comboBoxThatHasChanged == modeCombo)
+    {
+        //[UserComboBoxCode_modeCombo] -- add your combo box handling code here..
+        //[/UserComboBoxCode_modeCombo]
+    }
+
+    //[UsercomboBoxChanged_Post]
+    //[/UsercomboBoxChanged_Post]
 }
 
 void RangLoopComponent::mouseWheelMove (const MouseEvent& e, float wheelIncrementX, float wheelIncrementY)
@@ -579,7 +756,7 @@ bool RangLoopComponent::keyPressed (const KeyPress& key)
 
 		}
 	}
-  
+
   if( code == '1'){ switchLoop(0); return true;}
   if( code == '2'){ switchLoop(1); return true;}
   if( code == '3'){ switchLoop(2); return true;}
@@ -600,11 +777,11 @@ bool RangLoopComponent::keyPressed (const KeyPress& key)
 
 
   return false;  // Return true if your handler uses this key event, or false to allow it to be passed-on.
-  
+
 update:
   updateLoop();
   return true;
-  //[/UserCode_keyPressed]
+    //[/UserCode_keyPressed]
 }
 
 
@@ -631,53 +808,70 @@ void RangLoopComponent::toggleRecord(){
 	if(!loops[curLoop]->recording){
 		int sampleRate = audioDeviceManager.getCurrentAudioDevice()->getCurrentSampleRate();
 		if( loops[curLoop]->numSamples == 0 ){
-      loops[curLoop]->allocate( sampleRate * 10.f );
-    }else loops[curLoop]->clear();
+            loops[curLoop]->allocate( sampleRate * 10.f );
+        }else loops[curLoop]->clear();
 
 		recordButton->setToggleState(true,false);
 
-    loops[curLoop]->stop();
-    loops[curLoop]->record();
+        loops[curLoop]->stop();
+        loops[curLoop]->record();
 
 	}else{
 
-    loops[curLoop]->stop();
+        loops[curLoop]->stop();
 		recordButton->setToggleState(false,false);
+        recordoutButton->setToggleState(false,false);
 		play();
 	}
 
 }
 void RangLoopComponent::toggleStack(){
     loops[curLoop]->stack();
-		stackButton->setToggleState(loops[curLoop]->stacking,false);
+	stackButton->setToggleState(loops[curLoop]->stacking,false);
 }
 void RangLoopComponent::toggleReverse(){
 
-  loops[curLoop]->reverse();
-  reverseButton->setToggleState(loops[curLoop]->reversing,false);
+    loops[curLoop]->reverse();
+    reverseButton->setToggleState(loops[curLoop]->reversing,false);
 
 }
 void RangLoopComponent::switchLoop(int index){
-  
-  if( index == curLoop ) loops[curLoop]->playing = !loops[curLoop]->playing && loops[curLoop]->numSamples;
+
+    if( index == curLoop ) loops[curLoop]->playing = !loops[curLoop]->playing && loops[curLoop]->numSamples;
 
 	if( loops[curLoop]->recording ) toggleRecord();
-  loopComps[curLoop]->selected = false;
+    loopComps[curLoop]->selected = false;
 
-  curLoop = index;
-  
-  Loop* loop = loops[curLoop];
-  
-  decayKnob->setValue( (1.f-loop->decay)*decayKnob->getMaximum(), false );
-  volumeKnob->setValue( loop->gain*volumeKnob->getMaximum(), false );
-  stackButton->setToggleState( loop->stacking, false);
-  reverseButton->setToggleState( loop->reversing, false);
-  loopComps[curLoop]->selected = true;
+    curLoop = index;
+    updateControls();
+    loopComps[curLoop]->selected = true;
 
 }
 void RangLoopComponent::updateLoop(){
-  loops[curLoop]->decay = 1 - decayKnob->getValue()/decayKnob->getMaximum();
-  loops[curLoop]->gain = volumeKnob->getValue()/volumeKnob->getMaximum();
+    loops[curLoop]->decay = 1.f - decayKnob->getValue()/decayKnob->getMaximum();
+    loops[curLoop]->gain = 3.f * volumeKnob->getValue()/volumeKnob->getMaximum();
+    loops[curLoop]->pan = panKnob->getValue()/panKnob->getMaximum();
+}
+void RangLoopComponent::updateControls(){
+    
+    Loop* loop = loops[curLoop];
+    decayKnob->setValue( (1.f-loop->decay)*decayKnob->getMaximum(), false );
+    volumeKnob->setValue( loop->gain*volumeKnob->getMaximum()/3.f, false );
+    panKnob->setValue( loop->pan*panKnob->getMaximum(), false );
+    stackButton->setToggleState( loop->stacking, false);
+    reverseButton->setToggleState( loop->reversing, false);
+    
+}
+void RangLoopComponent::updatePlaybackSlider(){
+    Loop* loop = loops[curLoop];
+    if( loop->numSamples ){
+        float min = loop->b[0].rMin * slider->getMaximum() / loop->b[0].curSize;
+        float max = loop->b[0].rMax * slider->getMaximum() / loop->b[0].curSize;
+        float pos = loop->b[0].rPos * slider->getMaximum() / loop->b[0].curSize;
+        slider->setMinValue(min);
+        slider->setMaxValue(max);
+        slider->setValue(pos);
+    } 
 }
 
 void RangLoopComponent::audioDeviceIOCallback (const float** inputChannelData,
@@ -691,61 +885,25 @@ void RangLoopComponent::audioDeviceIOCallback (const float** inputChannelData,
       zeromem (outputChannelData[i], sizeof (float) * numSamples);
 
 	for(int i=0; i < loops.size(); i++ )
-   loops[i]->audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
-
-  //memcpy( outputChannelData[1], outputChannelData[0], numSamples * sizeof(float));
-
-	//for( int i = 0; i < numSamples; i++)
-	//	outputChannelData[0][i] = inputChannelData[0][i];
-
-    // pass the audio callback on to our player source
-	// audioSourcePlayer.audioDeviceIOCallback (inputChannelData, totalNumInputChannels, outputChannelData, totalNumOutputChannels, numSamples);
-
-	/*AudioSourceChannelInfo fileBufInfo =  AudioSourceChannelInfo();
-
-	AudioSampleBuffer fileBuffer = AudioSampleBuffer( outputChannelData, totalNumOutputChannels, numSamples);
-
-	fileBufInfo.buffer = &fileBuffer;
-	fileBufInfo.startSample = 0;
-	fileBufInfo.numSamples = numSamples;
-
-	transportSource.getNextAudioBlock( fileBufInfo);
-
-
-	if( recordFileStream && !stackButton->getToggleState()){
-
-		AudioSampleBuffer inputBuffer = AudioSampleBuffer( (float **)inputChannelData, totalNumInputChannels, numSamples);
-
-		inputBuffer.writeToAudioWriter( recordWriter, 0, numSamples);
-
-		//	fileBuffer.copyFrom( 0,0, inputBuffer, 0, 0, numSamples);
-
-		samplesRecorded += numSamples;
-	}
-
-
-	if( recordFileStream && stackButton->getToggleState()){
-
-		AudioSampleBuffer inputBuffer = AudioSampleBuffer( (float **)inputChannelData, totalNumInputChannels, numSamples);
-
-		inputBuffer.addFromWithRamp(0, 0, fileBuffer.getSampleData(0), numSamples, .9, .9);
-
-		recordFileStream->setPosition(44 + (samplesRecorded % currentAudioFileSource->getTotalLength()));
-		inputBuffer.writeToAudioWriter( recordWriter, 0, numSamples);
-
-		samplesRecorded += numSamples;
-
-	}*/
+        if( i != curLoop ) loops[i]->audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
+    
+    if( loops[curLoop]->recording && recordoutButton->getToggleState() )
+        loops[curLoop]->audioIO( (float**)outputChannelData, 0, numSamples );
+    else loops[curLoop]->audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
+  
+  recorder->audioDeviceIOCallback(  (const float**)outputChannelData, totalNumOutputChannels, 0, 0, numSamples );
 }
 
 void RangLoopComponent::audioDeviceAboutToStart (AudioIODevice* device)
 {
     //audioSourcePlayer.audioDeviceAboutToStart (device);
+  recorder->audioDeviceAboutToStart(device);
 }
 
 void RangLoopComponent::audioDeviceStopped()
 {
     //audioSourcePlayer.audioDeviceStopped();
+  recorder->audioDeviceStopped();
 }
 
 
@@ -766,18 +924,20 @@ void RangLoopComponent::updatePlaytimeLabel(){
 }
 
 void RangLoopComponent::focusOfChildComponentChanged (FocusChangeType cause){
-  
+
   Component* comp = getCurrentlyFocusedComponent();
   for( int i=0; i < loopComps.size(); i++)
     if(loopComps[i] == comp) switchLoop(i);
 }
 void RangLoopComponent::timerCallback(){
-  
+
   for( int i=0; i < loops.size(); i++){
     loops[i]->rms = loops[i]->b[0].getRMSR( 2048 );
     //loopComps[i]->repaint();
   }
-  
+    updateControls();
+    updatePlaybackSlider();
+
   repaint();
 	/*if( recordFileStream && !stackButton->getToggleState() ) {
 		int seconds = (double)samplesRecorded / recordWriter->getSampleRate();
@@ -804,35 +964,34 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="RangLoopComponent" componentName=""
                  parentClasses="public Component" constructorParams="" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
-                 fixedSize="0" initialWidth="600" initialHeight="400">
+                 fixedSize="0" initialWidth="550" initialHeight="400">
   <METHODS>
     <METHOD name="keyPressed (const KeyPress&amp; key)"/>
     <METHOD name="mouseWheelMove (const MouseEvent&amp; e, float wheelIncrementX, float wheelIncrementY)"/>
   </METHODS>
   <BACKGROUND backgroundColour="ff000000">
-    <IMAGE pos="196 396 128 128" resource="ftttmlogorings_gif" opacity="0.195"
+    <IMAGE pos="404 124 128 128" resource="ftttmlogorings_gif" opacity="0.195"
            mode="0"/>
   </BACKGROUND>
+  <GENERICCOMPONENT name="Audio Input Display" id="b7e325114b8cbc9c" memberName="audioInDispComp"
+                    virtualName="" explicitFocusOrder="0" pos="4 4 98.039% 64" class="LiveAudioDisplayComp"
+                    params=""/>
   <GROUPCOMPONENT name="new group" id="2a9463386ba23df5" memberName="groupComponent2"
-                  virtualName="" explicitFocusOrder="0" pos="248 168 256 136" outlinecol="66812b2b"
+                  virtualName="" explicitFocusOrder="0" pos="248 168 256 146" outlinecol="66812b2b"
                   textcol="66812b2b" title="Loop Controls"/>
   <GROUPCOMPONENT name="new group" id="e4ab2ba44659a2e4" memberName="groupComponent3"
                   virtualName="" explicitFocusOrder="0" pos="248 64 256 104" outlinecol="66812b2b"
                   textcol="66812b2b" title="Main Controls"/>
   <TEXTBUTTON name="record" id="2e705ec45ad2983d" memberName="recordButton"
-              virtualName="" explicitFocusOrder="0" pos="312 264 56 16" bgColOff="ff6be171"
+              virtualName="" explicitFocusOrder="0" pos="260 256 56 16" bgColOff="ff6be171"
               bgColOn="ff008000" buttonText="record" connectedEdges="2" needsCallback="1"
               radioGroupId="0"/>
-  <TEXTBUTTON name="switch" id="eed935707ea8ad65" memberName="switchButton"
-              virtualName="" explicitFocusOrder="0" pos="416 184 72 24" bgColOff="ff6be171"
-              bgColOn="ff008000" buttonText="A / B" connectedEdges="0" needsCallback="1"
-              radioGroupId="0"/>
   <TEXTBUTTON name="reverse" id="9581e586633172eb" memberName="reverseButton"
-              virtualName="" explicitFocusOrder="0" pos="368 264 56 16" bgColOff="ff6be171"
+              virtualName="" explicitFocusOrder="0" pos="372 256 56 16" bgColOff="ff6be171"
               bgColOn="ff008000" buttonText="reverse" connectedEdges="3" needsCallback="1"
               radioGroupId="0"/>
   <TEXTBUTTON name="stack" id="c95a37574ee788a9" memberName="stackButton" virtualName=""
-              explicitFocusOrder="0" pos="424 264 64 16" bgColOff="ff6be171"
+              explicitFocusOrder="0" pos="428 256 64 16" bgColOff="ff6be171"
               bgColOn="ff008000" buttonText="stack" connectedEdges="1" needsCallback="1"
               radioGroupId="0"/>
   <SLIDER name="new slider" id="600d5c02ae538547" memberName="slider" virtualName=""
@@ -840,18 +999,8 @@ BEGIN_JUCER_METADATA
           rotarysliderfill="ff6be171" min="0" max="10" int="0" style="ThreeValueHorizontal"
           textBoxPos="NoTextBox" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
-  <LABEL name="durationLabel" id="edd486ab06e40cbf" memberName="durationLabel"
-         virtualName="" explicitFocusOrder="0" pos="432 128 48 24" textCol="ff6be171"
-         edTextCol="ff000000" edBkgCol="0" labelText="0:00" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="10" bold="1" italic="0" justification="36"/>
-  <LABEL name="playtime" id="b3c3484d92fa9ac1" memberName="playtimeLabel"
-         virtualName="" explicitFocusOrder="0" pos="400 128 48 24" textCol="ff6be171"
-         edTextCol="ff000000" edBkgCol="0" labelText="0:00" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="10" bold="0" italic="0" justification="36"/>
   <SLIDER name="volumeKnob" id="15bbd88fe33cb947" memberName="volumeKnob"
-          virtualName="" explicitFocusOrder="0" pos="256 183 40 24" rotarysliderfill="ff6be171"
+          virtualName="" explicitFocusOrder="0" pos="256 184 40 24" rotarysliderfill="ff6be171"
           min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="new label" id="efd284515b19c3ca" memberName="label3" virtualName=""
@@ -860,33 +1009,30 @@ BEGIN_JUCER_METADATA
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="11" bold="0" italic="0" justification="33"/>
   <SLIDER name="decayKnob" id="230bee0727aedcef" memberName="decayKnob"
-          virtualName="" explicitFocusOrder="0" pos="364 183 40 24" rotarysliderfill="ff6be171"
+          virtualName="" explicitFocusOrder="0" pos="324 184 40 24" rotarysliderfill="ff6be171"
           min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="new label" id="3ff5a890e2ada81d" memberName="label2" virtualName=""
-         explicitFocusOrder="0" pos="368 200 39 23" textCol="ff6be171"
+         explicitFocusOrder="0" pos="327 208 39 16" textCol="ff6be171"
          edTextCol="ff000000" edBkgCol="0" labelText="decay" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="11" bold="0" italic="0" justification="33"/>
   <SLIDER name="speedKnob" id="f80b540670d69f9b" memberName="speedKnob"
-          virtualName="" explicitFocusOrder="0" pos="328 184 40 24" rotarysliderfill="ff6be171"
+          virtualName="" explicitFocusOrder="0" pos="364 184 40 24" rotarysliderfill="ff6be171"
           min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="new label" id="bce4a94ac3892128" memberName="label4" virtualName=""
-         explicitFocusOrder="0" pos="328 200 39 24" textCol="ff6be171"
+         explicitFocusOrder="0" pos="365 208 39 16" textCol="ff6be171"
          edTextCol="ff000000" edBkgCol="0" labelText="speed" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="11" bold="0" italic="0" justification="33"/>
   <TEXTBUTTON name="devices" id="7aa3c0dfe732b1e6" memberName="deviceButton"
-              virtualName="" explicitFocusOrder="0" pos="392 72 104 24" bgColOff="ff6be171"
+              virtualName="" explicitFocusOrder="0" pos="416 88 80 16" bgColOff="ff6be171"
               buttonText="Audio device..." connectedEdges="0" needsCallback="1"
               radioGroupId="0"/>
   <JUCERCOMP name="Loop" id="effe31c54ad57959" memberName="loopComp1" virtualName=""
              explicitFocusOrder="0" pos="8 80 50 50" sourceFile="LoopComponent.cpp"
              constructorParams=""/>
-  <GENERICCOMPONENT name="Audio Input Display" id="b7e325114b8cbc9c" memberName="audioInDispComp"
-                    virtualName="" explicitFocusOrder="0" pos="4 4 98.039% 64" class="LiveAudioDisplayComp"
-                    params=""/>
   <GENERICCOMPONENT name="Audio Output Display" id="b8e074bbe3bb4634" memberName="audioOutDispComp"
                     virtualName="" explicitFocusOrder="0" pos="8 320 98.039% 64"
                     class="LiveAudioDisplayComp" params=""/>
@@ -939,14 +1085,62 @@ BEGIN_JUCER_METADATA
                   virtualName="" explicitFocusOrder="0" pos="0 64 240 250" outlinecol="66812b2b"
                   textcol="66812b2b" title="Loops"/>
   <SLIDER name="masterKnob" id="3b39285a98b05ce8" memberName="masterKnob"
-          virtualName="" explicitFocusOrder="0" pos="256 87 40 24" rotarysliderfill="ff6be171"
+          virtualName="" explicitFocusOrder="0" pos="256 85 40 24" rotarysliderfill="ff6be171"
           min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="new label" id="f695298f67784d5" memberName="label5" virtualName=""
-         explicitFocusOrder="0" pos="256 112 39 16" textCol="ff6be171"
+         explicitFocusOrder="0" pos="256 108 39 16" textCol="ff6be171"
          edTextCol="ff000000" edBkgCol="0" labelText="master" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="11" bold="0" italic="0" justification="33"/>
+  <SLIDER name="decayKnob" id="11fd9cbb0a1a4123" memberName="panKnob" virtualName=""
+          explicitFocusOrder="0" pos="290 184 40 24" rotarysliderfill="ff6be171"
+          min="0" max="10" int="0" style="Rotary" textBoxPos="NoTextBox"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+  <LABEL name="new label" id="b6e4c9edaecf7f3b" memberName="label6" virtualName=""
+         explicitFocusOrder="0" pos="290 208 39 16" textCol="ff6be171"
+         edTextCol="ff000000" edBkgCol="0" labelText="pan" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="11" bold="0" italic="0" justification="36"/>
+  <TEXTBUTTON name="playpauseButton" id="ab189595516f048c" memberName="playpauseButton"
+              virtualName="" explicitFocusOrder="0" pos="316 256 56 16" bgColOff="ff6be171"
+              bgColOn="ff008000" buttonText="|&gt; / ||" connectedEdges="3"
+              needsCallback="1" radioGroupId="0"/>
+  <TEXTBUTTON name="savesession" id="34b289b8907d4475" memberName="savesessionButton"
+              virtualName="" explicitFocusOrder="0" pos="376 138 60 16" bgColOff="ff6be171"
+              buttonText="save session" connectedEdges="3" needsCallback="1"
+              radioGroupId="0"/>
+  <TEXTBUTTON name="loadsession" id="a2c459d4050369a0" memberName="loadsessionButton"
+              virtualName="" explicitFocusOrder="0" pos="436 138 60 16" bgColOff="ff6be171"
+              buttonText="load session" connectedEdges="1" needsCallback="1"
+              radioGroupId="0"/>
+  <TEXTBUTTON name="saveloop" id="2d4c086bcd37482a" memberName="saveloopButton"
+              virtualName="" explicitFocusOrder="0" pos="371 288 60 16" bgColOff="ff6be171"
+              buttonText="save loop" connectedEdges="2" needsCallback="1" radioGroupId="0"/>
+  <TEXTBUTTON name="loadloop" id="50c2c47a3c703d72" memberName="loadloopButton"
+              virtualName="" explicitFocusOrder="0" pos="431 288 60 16" bgColOff="ff6be171"
+              buttonText="load loop" connectedEdges="1" needsCallback="1" radioGroupId="0"/>
+  <TEXTBUTTON name="recordsession" id="6ac327b59a40fbba" memberName="recordsessionButton"
+              virtualName="" explicitFocusOrder="0" pos="316 138 60 16" bgColOff="ff6be171"
+              bgColOn="ff008000" buttonText="record session" connectedEdges="2"
+              needsCallback="1" radioGroupId="0"/>
+  <COMBOBOX name="mode" id="3a3c7bc4176cc4c8" memberName="modeCombo" virtualName=""
+            explicitFocusOrder="0" pos="312 88 88 14" editable="0" layout="33"
+            items="free&#10;synchronized&#10;sequenced" textWhenNonSelected="free"
+            textWhenNoItems="(no choices)"/>
+  <LABEL name="new label" id="8ea7b9b71ae6ae63" memberName="label7" virtualName=""
+         explicitFocusOrder="0" pos="330 106 39 16" textCol="ff6be171"
+         edTextCol="ff000000" edBkgCol="0" labelText="mode" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="11" bold="0" italic="0" justification="33"/>
+  <TOGGLEBUTTON name="mastertoggle" id="829b04235034aca3" memberName="masterToggle"
+                virtualName="" explicitFocusOrder="0" pos="416 200 64 16" txtcol="ff6be171"
+                buttonText="master" connectedEdges="0" needsCallback="1" radioGroupId="0"
+                state="0"/>
+  <TEXTBUTTON name="recordout" id="61ad841f8df043fe" memberName="recordoutButton"
+              virtualName="" explicitFocusOrder="0" pos="260 287 72 16" bgColOff="ff6be171"
+              bgColOn="ff008000" buttonText="record from output" connectedEdges="0"
+              needsCallback="1" radioGroupId="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

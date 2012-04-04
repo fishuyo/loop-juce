@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  12 Mar 2012 1:10:46pm
+  Creation date:  18 Mar 2012 11:57:19pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,8 +19,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_E6DFE6B5__
-#define __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_E6DFE6B5__
+#ifndef __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_3106768B__
+#define __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_3106768B__
 
 //[Headers]     -- You can add your own extra header files here --
 
@@ -46,6 +46,7 @@
 class RangLoopComponent  : public Component,
                            public ButtonListener,
                            public SliderListener,
+                           public ComboBoxListener,
                            public AudioIODeviceCallback,
                            public Timer
 {
@@ -63,7 +64,9 @@ public:
 	void toggleStack();
 	void toggleReverse();
 	void switchLoop(int index);
-  void updateLoop();
+    void updateLoop();
+    void updateControls();
+    void updatePlaybackSlider();
 
 	void audioDeviceIOCallback (const float** inputChannelData,
                                 int totalNumInputChannels,
@@ -74,14 +77,15 @@ public:
 	void audioDeviceStopped();
 	void changeListenerCallback (ChangeBroadcaster *source);
 	void updatePlaytimeLabel();
-  void timerCallback();
-  void focusOfChildComponentChanged (FocusChangeType cause);
+    void timerCallback();
+    void focusOfChildComponentChanged (FocusChangeType cause);
     //[/UserMethods]
 
     void paint (Graphics& g);
     void resized();
     void buttonClicked (Button* buttonThatWasClicked);
     void sliderValueChanged (Slider* sliderThatWasMoved);
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged);
     void mouseWheelMove (const MouseEvent& e, float wheelIncrementX, float wheelIncrementY);
     bool keyPressed (const KeyPress& key);
 
@@ -112,15 +116,13 @@ private:
     //[/UserVariables]
 
     //==============================================================================
+    LiveAudioDisplayComp* audioInDispComp;
     GroupComponent* groupComponent2;
     GroupComponent* groupComponent3;
     TextButton* recordButton;
-    TextButton* switchButton;
     TextButton* reverseButton;
     TextButton* stackButton;
     Slider* slider;
-    Label* durationLabel;
-    Label* playtimeLabel;
     Slider* volumeKnob;
     Label* label3;
     Slider* decayKnob;
@@ -129,7 +131,6 @@ private:
     Label* label4;
     TextButton* deviceButton;
     LoopComponent* loopComp1;
-    LiveAudioDisplayComp* audioInDispComp;
     LiveAudioDisplayComp* audioOutDispComp;
     LoopComponent* loopComp2;
     LoopComponent* loopComp3;
@@ -149,6 +150,18 @@ private:
     GroupComponent* groupComponent;
     Slider* masterKnob;
     Label* label5;
+    Slider* panKnob;
+    Label* label6;
+    TextButton* playpauseButton;
+    TextButton* savesessionButton;
+    TextButton* loadsessionButton;
+    TextButton* saveloopButton;
+    TextButton* loadloopButton;
+    TextButton* recordsessionButton;
+    ComboBox* modeCombo;
+    Label* label7;
+    ToggleButton* masterToggle;
+    TextButton* recordoutButton;
     Image cachedImage_ftttmlogorings_gif;
 
 
@@ -159,4 +172,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_E6DFE6B5__
+#endif   // __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_3106768B__

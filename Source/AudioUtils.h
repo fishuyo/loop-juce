@@ -61,7 +61,7 @@ public:
 	
     void audioDeviceStopped();
 	
-    void audioDeviceIOCallback (const float** inputChannelData, int /*numInputChannels*/,
+    void audioDeviceIOCallback (const float** inputChannelData, int numInputChannels,
                                 float** outputChannelData, int numOutputChannels,
                                 int numSamples);
 	

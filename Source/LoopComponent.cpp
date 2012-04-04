@@ -69,6 +69,7 @@ void LoopComponent::paint (Graphics& g)
   float thick = 2.0f + 5.f*rms*loop.gain;
   int h = loop.gain * 12;
   int h2 = (1.f-loop.decay) * 18;
+    int x=10, xpan=loop.pan * 20;
 
   Colour c,c2,c3;
   if( loop.numSamples != 0 ){
@@ -88,36 +89,46 @@ void LoopComponent::paint (Graphics& g)
 
     //[/UserPrePaint]
 
+    //bg
     g.setColour (c);
     g.fillRoundedRectangle (2.0f, 2.0f, 45.0f, 45.0f, 5.0000f);
 
+    //outline
     g.setColour (c2);
     g.drawRoundedRectangle (2.0f, 2.0f, 45.0f, 45.0f, 5.0000f, thick);
 
+    //number
     g.setColour (c3);
     g.setFont (Font (Font::getDefaultMonospacedFontName(), 9.6000f, Font::bold));
     g.drawText (ident,
                 20, 20, 10, 10,
                 Justification::centred, true);
 
-    //g.setColour (Colour (0xa03aac3e));
-    //g.fillRect (10, 35, 30, 2);
+    //pan
+    g.setColour (Colour (0xa03aac3e));
+    g.fillRect (15+xpan, 30, 1, 2);
 
+    //gain
     if( h < 18 ) g.setColour (Colour (0xff2a74a5));
     else g.setColour( Colour(200,70,70) );
     g.fillRect (40, 42-h, 2, h);
+    
+    //decay
+    g.setColour (Colour (0xff2a74a5));
+    g.fillRect (36, 42-h2, 2, h2);
 
   if( loop.recording || loop.stacking ){
     g.setColour (Colour (0xffb33f3f));
-    g.fillEllipse (10.0f, 10.0f, 4.0f, 4.0f);
-  }else if( !loop.playing && loop.numSamples ){
+    g.fillEllipse (10, 10, 4, 4);
+      x+=10;
+  }
+  if( !loop.playing && !loop.recording && loop.numSamples ){
     g.setColour( Colour(10, 70, 70) );
-    g.fillRect( 10.f,10.f, 1.f, 4.f);
-    g.fillRect( 12.f, 10.f, 1.f, 4.f);
+    g.fillRect( x,10, 1, 4);
+    g.fillRect( x+2, 10, 1, 4);
   }
 
-    g.setColour (Colour (0xff2a74a5));
-    g.fillRect (36, 42-h2, 2, h2);
+
 
     //g.setColour (Colour (0xff2a6ba5));
     //g.fillRect (10, 39, 30, 2);
@@ -157,17 +168,22 @@ void LoopComponent::mouseWheelMove (const MouseEvent& e, float wheelIncrementX, 
 {
     //[UserCode_mouseWheelMove] -- Add your code here...
     if( e.mods == ModifierKeys::shiftModifier ){
-      loop.b[0].rPos += wheelIncrementX*1024;
-      while( loop.b[0].rPos < loop.b[0].rMin ) loop.b[0].rPos += (loop.b[0].rMax-loop.b[0].rMin);
-      while( loop.b[0].rPos > loop.b[0].rMax ) loop.b[0].rPos -= (loop.b[0].rMax-loop.b[0].rMin);
+      //loop.b[0].rPos += wheelIncrementX*1024;
+      //while( loop.b[0].rPos < loop.b[0].rMin ) loop.b[0].rPos += (loop.b[0].rMax-loop.b[0].rMin);
+      //while( loop.b[0].rPos > loop.b[0].rMax ) loop.b[0].rPos -= (loop.b[0].rMax-loop.b[0].rMin);
+        loop.decay -= wheelIncrementY;
+        if( loop.decay > 1.f ) loop.decay = 1.f;
+        else if( loop.decay < 0.f ) loop.decay = 0.f;
       
     }else{
       loop.gain += wheelIncrementY;
-      loop.decay += wheelIncrementX;
       if( loop.gain < 0.f ) loop.gain = 0.f;
       else if( loop.gain > 3.0f) loop.gain = 3.0f;
-      if( loop.decay > 1.f ) loop.decay = 1.f;
-      else if( loop.decay < 0.f ) loop.decay = 0.f;
+        
+        loop.pan -= wheelIncrementX;
+        if( loop.pan > 1.f ) loop.pan = 1.f;
+        else if( loop.pan < 0.f ) loop.pan = 0.f;
+      
     }
     //[/UserCode_mouseWheelMove]
 }

@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  12 Mar 2012 1:10:26pm
+  Creation date:  12 Mar 2012 1:10:46pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,11 +19,17 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENTTEMP_95560D42__
-#define __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENTTEMP_95560D42__
+#ifndef __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_E6DFE6B5__
+#define __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_E6DFE6B5__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "juce.h"
+
+#include <vector>
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "AudioUtils.h"
+#include "AudioDemoSetupPage.h"
+#include "LoopBuffer.h"
+
 //[/Headers]
 
 #include "LoopComponent.h"
@@ -39,7 +45,9 @@
 */
 class RangLoopComponent  : public Component,
                            public ButtonListener,
-                           public SliderListener
+                           public SliderListener,
+                           public AudioIODeviceCallback,
+                           public Timer
 {
 public:
     //==============================================================================
@@ -48,6 +56,26 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+	void play();
+	void stop();
+
+	void toggleRecord();
+	void toggleStack();
+	void toggleReverse();
+	void switchLoop(int index);
+  void updateLoop();
+
+	void audioDeviceIOCallback (const float** inputChannelData,
+                                int totalNumInputChannels,
+                                float** outputChannelData,
+                                int totalNumOutputChannels,
+                                int numSamples);
+	void audioDeviceAboutToStart (AudioIODevice* device);
+	void audioDeviceStopped();
+	void changeListenerCallback (ChangeBroadcaster *source);
+	void updatePlaytimeLabel();
+  void timerCallback();
+  void focusOfChildComponentChanged (FocusChangeType cause);
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -67,6 +95,20 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    bool nowPlaying;
+    bool nowRecording;
+    bool nowStacking;
+    bool nowSpeeding;
+    bool nowReversing;
+
+    std::vector<LoopComponent*> loopComps;
+    std::vector<Loop*> loops;
+    int curLoop;
+
+    AudioDeviceManager audioDeviceManager;
+    //AudioDeviceSelectorComponent* deviceSelector;
+
+    ScopedPointer<AudioRecorder> recorder;
     //[/UserVariables]
 
     //==============================================================================
@@ -117,4 +159,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENTTEMP_95560D42__
+#endif   // __JUCER_HEADER_RANGLOOPCOMPONENT_RANGLOOPCOMPONENT_E6DFE6B5__

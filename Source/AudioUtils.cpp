@@ -211,9 +211,9 @@ void AudioRecorder::audioDeviceIOCallback (const float** inputChannelData, int n
             activeWriter->write (inputChannelData, numSamples);
 		
         // We need to clear the output buffers, in case they're full of junk..
-        for (int i = 0; i < numOutputChannels; ++i)
-            if (outputChannelData[i] != 0)
-                zeromem (outputChannelData[i], sizeof (float) * numSamples);
+        //for (int i = 0; i < numOutputChannels; ++i)
+        //    if (outputChannelData[i] != 0)
+        //        zeromem (outputChannelData[i], sizeof (float) * numSamples);
 }
 	
 
