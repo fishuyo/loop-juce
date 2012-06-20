@@ -9,6 +9,7 @@ struct LoopBuffer {
   unsigned int maxSize, curSize; //allocated size, samples recorded
   unsigned int rPos, wPos; //read head, write head at last read
   unsigned int rMin, rMax; //read limiters
+    int times;
 
   LoopBuffer();
   LoopBuffer( unsigned int size);
@@ -34,10 +35,12 @@ struct LoopBuffer {
   
   void applyGain( float gain, unsigned int numSamples, unsigned int offset );
   
+  //get root mean square of numSamples starting at offset
   float getRMS( unsigned int numSamples, unsigned int offset);
+  //get root mean square of numSamples ago
   float getRMSR( unsigned int numSamples);
 
-  //read between b1 and b2, uses smaller value as min
+  //read between b1 and b2, uses smaller value as min (in samples)
   void setBounds( unsigned int b1, unsigned int b2);
 
 };
@@ -49,9 +52,11 @@ struct Loop {
   unsigned int sampleRate;
   unsigned int numSamples;
   float seconds;
+    int times;
 
   float gain, pan, decay, rms;
   bool recording,playing,stacking,reversing,undoing;
+    bool recOut;
   float *iobuffer;
 
   Loop();
@@ -61,6 +66,7 @@ struct Loop {
   void allocate( unsigned int n );
   
   void play();
+    void play(int times);
   void stop();
   void rewind();
   void record();
@@ -70,7 +76,8 @@ struct Loop {
   void clear();
   
   void audioIO( float** in, float** out, unsigned int count ); 
-  
+  //int load( const char* filename );
+  //int save( const char* filename );
 
 };
 

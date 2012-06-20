@@ -26,9 +26,10 @@
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
-LoopComponent::LoopComponent ( char* c ){
+LoopComponent::LoopComponent ( Loop *loop_, char* c ){
   setSize(50,50);
   ident = c;
+  loop = loop_;
   selected =false;
 }
 //[/MiscUserDefs]
@@ -64,19 +65,19 @@ LoopComponent::~LoopComponent()
 void LoopComponent::paint (Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
-  float rms = loop.rms*20.f;
+  float rms = loop->rms*20.f;
   if(rms > 1.f ) rms = 1.f;
-  float thick = 2.0f + 5.f*rms*loop.gain;
-  int h = loop.gain * 12;
-  int h2 = (1.f-loop.decay) * 18;
-    int x=10, xpan=loop.pan * 20;
+  float thick = 2.0f + 5.f*rms*loop->gain;
+  int h = loop->gain * 12;
+  int h2 = (1.f-loop->decay) * 18;
+    int x=10, xpan=loop->pan * 20;
 
   Colour c,c2,c3;
-  if( loop.numSamples != 0 ){
-    if( loop.stacking ) c = Colour( 165,81,81).withAlpha(rms);
+  if( loop->numSamples != 0 ){
+    if( loop->stacking ) c = Colour( 165,81,81).withAlpha(rms);
     else c = Colour( 58,172,62).withAlpha(rms);
 
-    if(loop.recording) c2 = Colour( 200,30,30 ).withAlpha(.8f);
+    if(loop->recording) c2 = Colour( 200,30,30 ).withAlpha(.8f);
     else c2 = Colour( 58,172,62 ).withAlpha(.8f);
 
   }else{
@@ -117,12 +118,12 @@ void LoopComponent::paint (Graphics& g)
     g.setColour (Colour (0xff2a74a5));
     g.fillRect (36, 42-h2, 2, h2);
 
-  if( loop.recording || loop.stacking ){
+  if( loop->recording || loop->stacking ){
     g.setColour (Colour (0xffb33f3f));
     g.fillEllipse (10, 10, 4, 4);
       x+=10;
   }
-  if( !loop.playing && !loop.recording && loop.numSamples ){
+  if( !loop->playing && !loop->recording && loop->numSamples ){
     g.setColour( Colour(10, 70, 70) );
     g.fillRect( x,10, 1, 4);
     g.fillRect( x+2, 10, 1, 4);
@@ -171,18 +172,18 @@ void LoopComponent::mouseWheelMove (const MouseEvent& e, float wheelIncrementX, 
       //loop.b[0].rPos += wheelIncrementX*1024;
       //while( loop.b[0].rPos < loop.b[0].rMin ) loop.b[0].rPos += (loop.b[0].rMax-loop.b[0].rMin);
       //while( loop.b[0].rPos > loop.b[0].rMax ) loop.b[0].rPos -= (loop.b[0].rMax-loop.b[0].rMin);
-        loop.decay -= wheelIncrementY;
-        if( loop.decay > 1.f ) loop.decay = 1.f;
-        else if( loop.decay < 0.f ) loop.decay = 0.f;
+        loop->decay -= wheelIncrementY;
+        if( loop->decay > 1.f ) loop->decay = 1.f;
+        else if( loop->decay < 0.f ) loop->decay = 0.f;
       
     }else{
-      loop.gain += wheelIncrementY;
-      if( loop.gain < 0.f ) loop.gain = 0.f;
-      else if( loop.gain > 3.0f) loop.gain = 3.0f;
+      loop->gain += wheelIncrementY;
+      if( loop->gain < 0.f ) loop->gain = 0.f;
+      else if( loop->gain > 3.0f) loop->gain = 3.0f;
         
-        loop.pan -= wheelIncrementX;
-        if( loop.pan > 1.f ) loop.pan = 1.f;
-        else if( loop.pan < 0.f ) loop.pan = 0.f;
+        loop->pan -= wheelIncrementX;
+        if( loop->pan > 1.f ) loop->pan = 1.f;
+        else if( loop->pan < 0.f ) loop->pan = 0.f;
       
     }
     //[/UserCode_mouseWheelMove]
@@ -204,7 +205,7 @@ void LoopComponent::audioDeviceIOCallback (const float** inputChannelData,
                             float** outputChannelData,
                             int totalNumOutputChannels,
                                            int numSamples){
-    loop.audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
+    loop->audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
 }
 void LoopComponent::audioDeviceAboutToStart (AudioIODevice* device){}
 void LoopComponent::audioDeviceStopped(){}

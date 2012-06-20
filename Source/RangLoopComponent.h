@@ -29,7 +29,9 @@
 #include "AudioUtils.h"
 #include "AudioDemoSetupPage.h"
 #include "LoopBuffer.h"
+#include "Looper.h"
 
+class RangOSC;
 //[/Headers]
 
 #include "LoopComponent.h"
@@ -105,6 +107,8 @@ private:
     bool nowSpeeding;
     bool nowReversing;
 
+    Looper looper;
+    RangOSC *osc;
     std::vector<LoopComponent*> loopComps;
     std::vector<Loop*> loops;
     int curLoop;

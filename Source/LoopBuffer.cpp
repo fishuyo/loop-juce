@@ -2,10 +2,14 @@
 #include <assert.h>
 #include <math.h>
 
+#include "sndfile.h"
+
 #include "LoopBuffer.h"
 
-LoopBuffer::LoopBuffer() : maxSize(0), curSize(0), wPos(0), rPos(0), rMin(0), rMax(0), samples(0) {}
-LoopBuffer::LoopBuffer( unsigned int size) : maxSize(size), curSize(0), wPos(0), rPos(0), rMin(0), rMax(0) {
+#define RW_SIZE 4096
+
+LoopBuffer::LoopBuffer() : maxSize(0), curSize(0), wPos(0), rPos(0), rMin(0), rMax(0), samples(0), times(0) {}
+LoopBuffer::LoopBuffer( unsigned int size) : maxSize(size), curSize(0), wPos(0), rPos(0), rMin(0), rMax(0), times(0) {
   samples = size > 0 ? new float[size] : 0;
 }
 
@@ -13,7 +17,7 @@ LoopBuffer::~LoopBuffer(){
   if( maxSize > 0 ) delete[] samples;
 }
 
-//resize sample buffer, default doubles current buffer size
+//resize sample buffer
 void LoopBuffer::resize( unsigned int size){
   if( (!size && !maxSize) || (size < maxSize) ) return;
   
@@ -34,7 +38,10 @@ void LoopBuffer::operator()( float s ){
 }
 //read sample
 float LoopBuffer::operator()(){
-  if(rPos >= rMax) rPos = rMin;
+    if(rPos >= rMax){ 
+        rPos = rMin;
+        times++;
+    }
   return samples[rPos++];
 }
   
@@ -50,7 +57,7 @@ void LoopBuffer::append( float *in, unsigned int numSamples ){
 
 //read sample data at r_head, between r_min and r_max
 void LoopBuffer::read( float *out, unsigned int numSamples, float gain=1.f){
-  if( rPos < rMin || rPos >= rMax) rPos = rMin;
+    if( rPos < rMin || rPos >= rMax){ rPos = rMin; times++; }
   int overlap = rPos + numSamples - rMax;
   
   if( overlap >= (int)(rMax-rMin) ) return;
@@ -63,6 +70,7 @@ void LoopBuffer::read( float *out, unsigned int numSamples, float gain=1.f){
       out[i++] = samples[rMin+j] * gain;
     }
     rPos = overlap;
+      times++;
     
   }else{
     for( int i = 0; i < numSamples; i++){
@@ -74,7 +82,7 @@ void LoopBuffer::read( float *out, unsigned int numSamples, float gain=1.f){
 
 void LoopBuffer::readR( float *out, unsigned int numSamples, float gain=1.f){
   
-  if( rPos < rMin || rPos >= rMax) rPos = rMax;
+    if( rPos < rMin || rPos >= rMax){ rPos = rMax; times++; }
   int underlap = rPos - numSamples - rMin;
   
   if( underlap <= -(int)(rMax-rMin) ) return;
@@ -90,6 +98,7 @@ void LoopBuffer::readR( float *out, unsigned int numSamples, float gain=1.f){
     }
     
     rPos = rMax + underlap;
+      times++;
     
   }else{
     for( int i = 0; i < numSamples; i++){
@@ -188,12 +197,13 @@ Loop::Loop(){
   numSamples = 0;
   seconds = 0.f;
   sampleRate = 44100;
-  recording = playing = stacking = undoing = reversing = false;
+  recording = playing = stacking = undoing = reversing = recOut = false;
   gain = 1.0f;
   pan = .5f;
   decay = .5f;
   rms = 0.f;
   iobuffer = 0;
+    times = 0;
 }
 
 Loop::Loop(float num_seconds, unsigned int rate=44100){
@@ -201,12 +211,13 @@ Loop::Loop(float num_seconds, unsigned int rate=44100){
   allocate( numSamples );
   seconds = num_seconds;
   sampleRate = rate;
-  recording = playing = stacking = undoing = reversing = false;
+  recording = playing = stacking = undoing = reversing = recOut = false;
   gain = 1.0f;
   pan = .5f;
   decay = .5f;
   rms = 0.f;
   iobuffer = 0;
+    times = 0;
 }
 
 Loop::~Loop(){
@@ -221,7 +232,8 @@ void Loop::allocate( unsigned int n ){
   iobuffer = new float[1024]; //TODO should adjust if change in blocksize
 }
 
-void Loop::play(){ playing = true; }
+void Loop::play(){ playing = true; recording=false; }
+void Loop::play(int times_){ times = times_; playing = true; recording=false; }
 void Loop::stop(){ playing = false; recording = false; }
 void Loop::rewind(){ b[0].rPos = b[0].rMin; }
 
@@ -246,35 +258,91 @@ void Loop::audioIO( float** in, float** out, unsigned int count ){
 
     b[0].append( in[0], count );
 		
-	}else if(playing && numSamples > 0){ //playback and stack
+  }else if(playing && numSamples > 0){ //playback and stack
 		
     lPos = b[0].rPos;
 		
-		if(reversing){
+    if(reversing){
       
       b[0].readR( iobuffer, count, gain );
       
-			if(stacking){	
-				b[0].applyGain( decay, count, b[0].rPos );
+      if(stacking){	
+	    b[0].applyGain( decay, count, b[0].rPos );
         b[0].addFromR( in[0], count, lPos );
-			}
+      }
 			
-		}else {
+    }else {
       
       b[0].read( iobuffer, count, gain );
       
-			if(stacking){
+	  if(stacking){
         b[0].applyGain( decay, count, lPos);
         b[0].addFrom( in[0], count, lPos );
-			}			
-		}
+	  }			
+	}
     
     //up mix to 2 channels
     for( int i=0; i < count; i++){
       out[0][i] += iobuffer[i] * l;
       out[1][i] += iobuffer[i] * r;
     }
+      
+    if( times > 0 && b[0].times >= times ){
+        b[0].times = 0; times = 0;
+        stop();
+    }
     
   }//end else if(playing)
 
-}  
+} 
+/*
+int Loop::load( const char* filename ){
+
+  SNDFILE *file;
+  SF_INFO sfinfo;
+  float buffer[RW_SIZE];
+  sf_count_t read;
+
+  if( !(file = sf_open(filename, SFM_READ, &sfinfo))){
+    //std::cout << "Error loading file " << filename << std::endl;
+    return -1;
+  }
+
+  sampleRate = sfinfo.samplerate;
+  allocate(sfinfo.frames);
+
+  while( (read = sf_readf_float( file, buffer, RW_SIZE/sfinfo.channels )) > 0 ){
+    switch( sfinfo.channels ){
+      case 1: 
+        b[0].append( buffer, read ); break;
+      case 2:
+        //mix to single channel
+        for( int i=0; i < read/2; i++) buffer[i] = (buffer[2*i]+buffer[2*i+1]) / 2.f;
+        b[0].append( buffer, read/2 ); break;
+      default: return -2; break;
+    }
+  }
+  sf_close(file);
+  return 0;
+}
+
+int Loop::save( const char* filename ){
+ 
+  SNDFILE *file;
+  SF_INFO sfinfo;
+  sf_count_t writ;
+
+  sfinfo.samplerate = sampleRate;
+  sfinfo.frames = numSamples;
+  sfinfo.channels = 1;
+  sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
+
+  if( !(file = sf_open(filename, SFM_WRITE, &sfinfo))){
+    //std::cout << "Error opening file " << filename << std::endl;
+    return -1;
+  }
+
+  writ = sf_writef_float( file, b[0].samples, numSamples );
+  sf_close( file );
+  return 0;
+}*/

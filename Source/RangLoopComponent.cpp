@@ -23,10 +23,25 @@
 //[/Headers]
 
 #include "RangLoopComponent.h"
+#include "ip/UdpSocket.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
-
+struct RangOSC : Thread {
+    LooperOSC *osc;
+    
+    RangOSC( Looper *looper ) : Thread("RangOSC") {
+        osc = new LooperOSC(looper); 
+    };
+    virtual void run(){
+        int port = 13000;
+        UdpListeningReceiveSocket s(IpEndpointName( IpEndpointName::ANY_ADDRESS, port ), osc );
+        
+        std::cout << "RangOSC on port " << port << std::endl;
+        
+        s.Run();
+    };
+};
 
 //[/MiscUserDefs]
 
@@ -172,25 +187,31 @@ RangLoopComponent::RangLoopComponent ()
     deviceButton->addListener (this);
     deviceButton->setColour (TextButton::buttonColourId, Colour (0xff6be171));
 
-    addAndMakeVisible (loopComp1 = new LoopComponent("1"));
+    char* id[16] = {"1","2","3","4","Q","W","E","R","A","S","D","F","Z","X","C","V"};
+    for( int i=0; i < 16; i++){
+        LoopComponent *loopComp = new LoopComponent( looper.newLoop(), id[i]);
+        loopComps.push_back( loopComp );
+    }
+    addAndMakeVisible (loopComp1 = loopComps[0]);
+    addAndMakeVisible (loopComp2 = loopComps[1]);
+    addAndMakeVisible (loopComp3 = loopComps[2]);
+    addAndMakeVisible (loopComp4 = loopComps[3]);
+    addAndMakeVisible (loopComp5 = loopComps[4]);
+    addAndMakeVisible (loopComp6 = loopComps[5]);
+    addAndMakeVisible (loopComp7 = loopComps[6]);
+    addAndMakeVisible (loopComp8 = loopComps[7]);
+    addAndMakeVisible (loopComp9 = loopComps[8]);
+    addAndMakeVisible (loopComp10 = loopComps[9]);
+    addAndMakeVisible (loopComp11 = loopComps[10]);
+    addAndMakeVisible (loopComp12 = loopComps[11]);
+    addAndMakeVisible (loopComp13 = loopComps[12]);
+    addAndMakeVisible (loopComp14 = loopComps[13]);
+    addAndMakeVisible (loopComp15 = loopComps[14]);
+    addAndMakeVisible (loopComp16 = loopComps[15]);
+
     addAndMakeVisible (audioOutDispComp = new LiveAudioDisplayComp());
     audioOutDispComp->setName (L"Audio Output Display");
 
-  addAndMakeVisible (loopComp2 = new LoopComponent("2"));
-  addAndMakeVisible (loopComp3 = new LoopComponent("3"));
-  addAndMakeVisible (loopComp4 = new LoopComponent("4"));
-  addAndMakeVisible (loopComp5 = new LoopComponent("Q"));
-  addAndMakeVisible (loopComp6 = new LoopComponent("W"));
-  addAndMakeVisible (loopComp7 = new LoopComponent("E"));
-  addAndMakeVisible (loopComp8 = new LoopComponent("R"));
-  addAndMakeVisible (loopComp9 = new LoopComponent("A"));
-  addAndMakeVisible (loopComp10 = new LoopComponent("S"));
-  addAndMakeVisible (loopComp11 = new LoopComponent("D"));
-  addAndMakeVisible (loopComp12 = new LoopComponent("F"));
-  addAndMakeVisible (loopComp13 = new LoopComponent("Z"));
-  addAndMakeVisible (loopComp14 = new LoopComponent("X"));
-  addAndMakeVisible (loopComp15 = new LoopComponent("C"));
-  addAndMakeVisible (loopComp16 = new LoopComponent("V"));
     addAndMakeVisible (groupComponent = new GroupComponent (L"Loops",
                                                             L"Loops"));
     groupComponent->setColour (GroupComponent::outlineColourId, Colour (0x66812b2b));
@@ -332,23 +353,6 @@ RangLoopComponent::RangLoopComponent ()
 
   curLoop = 0;
 
-  loops.push_back( &loopComp1->loop );loopComps.push_back( loopComp1 );
-  loops.push_back( &loopComp2->loop );loopComps.push_back( loopComp2 );
-  loops.push_back( &loopComp3->loop );loopComps.push_back( loopComp3 );
-  loops.push_back( &loopComp4->loop );loopComps.push_back( loopComp4 );
-  loops.push_back( &loopComp5->loop );loopComps.push_back( loopComp5 );
-  loops.push_back( &loopComp6->loop );loopComps.push_back( loopComp6 );
-  loops.push_back( &loopComp7->loop );loopComps.push_back( loopComp7 );
-  loops.push_back( &loopComp8->loop );loopComps.push_back( loopComp8 );
-  loops.push_back( &loopComp9->loop );loopComps.push_back( loopComp9 );
-  loops.push_back( &loopComp10->loop );loopComps.push_back( loopComp10 );
-  loops.push_back( &loopComp11->loop );loopComps.push_back( loopComp11 );
-  loops.push_back( &loopComp12->loop );loopComps.push_back( loopComp12 );
-  loops.push_back( &loopComp13->loop );loopComps.push_back( loopComp13 );
-  loops.push_back( &loopComp14->loop );loopComps.push_back( loopComp14 );
-  loops.push_back( &loopComp15->loop );loopComps.push_back( loopComp15 );
-  loops.push_back( &loopComp16->loop );loopComps.push_back( loopComp16 );
-
 
     const String error (audioDeviceManager.initialise (1, /* number of input channels */
                                                        2, /* number of output channels */
@@ -378,6 +382,10 @@ RangLoopComponent::RangLoopComponent ()
   switchLoop(0);
   this->toFront(true);
   this->grabKeyboardFocus();
+    
+    osc = new RangOSC( &looper );
+    osc->startThread();
+    
     //[/Constructor]
 }
 
@@ -558,7 +566,7 @@ void RangLoopComponent::buttonClicked (Button* buttonThatWasClicked)
     else if (buttonThatWasClicked == playpauseButton)
     {
         //[UserButtonCode_playpauseButton] -- add your button handler code here..
-      if( loops[curLoop]->playing ) stop();
+      if( looper(curLoop)->playing ) stop();
       else play();
         //[/UserButtonCode_playpauseButton]
     }
@@ -627,7 +635,7 @@ void RangLoopComponent::sliderValueChanged (Slider* sliderThatWasMoved)
         float min = slider->getMinValue() / slider->getMaximum();
         float max = slider->getMaxValue() / slider->getMaximum();
         //float pos = slider->getValue() / slider->getMaximum();
-        Loop* loop = loops[curLoop];
+        Loop* loop = looper(curLoop);
         
         loop->b[0].rMin = min * loop->b[0].curSize;
         loop->b[0].rMax = max * loop->b[0].curSize;
@@ -717,7 +725,7 @@ bool RangLoopComponent::keyPressed (const KeyPress& key)
 
 
 	if ( code == KeyPress::deleteKey || code == KeyPress::escapeKey ){
-		if( loops[curLoop]->playing ) stop();
+		if( looper(curLoop)->playing ) stop();
 		else play();
 		return true;
 
@@ -731,11 +739,11 @@ bool RangLoopComponent::keyPressed (const KeyPress& key)
 
 	}else if( code == KeyPress::pageUpKey){
 		//switchLoop();
-		if( !loops[curLoop]->recording ) toggleRecord();
+		if( !looper(curLoop)->recording ) toggleRecord();
 		return true;
 
 	}else if( code == KeyPress::spaceKey ){
-			if( !loops[curLoop]->playing )  toggleRecord();
+			if( !looper(curLoop)->playing )  toggleRecord();
 			else toggleStack();
 			return true;
 	}
@@ -790,35 +798,30 @@ update:
 
 void RangLoopComponent::play(){
 
-	if( curLoop > loops.size()) return;
+  looper(curLoop)->rewind();
+  looper(curLoop)->play();
 
-  loops[curLoop]->rewind();
-  loops[curLoop]->play();
-
-	//loopB ? playbackPositionB = 0 : playbackPosition = 0;
-	//nowPlaying = true;
 }
 void RangLoopComponent::stop(){
-  if( curLoop > loops.size() ) return;
-	loops[curLoop]->stop();
+	looper(curLoop)->stop();
 }
 
 void RangLoopComponent::toggleRecord(){
 
-	if(!loops[curLoop]->recording){
+	if(!looper(curLoop)->recording){
 		int sampleRate = audioDeviceManager.getCurrentAudioDevice()->getCurrentSampleRate();
-		if( loops[curLoop]->numSamples == 0 ){
-            loops[curLoop]->allocate( sampleRate * 10.f );
-        }else loops[curLoop]->clear();
+		if( looper(curLoop)->numSamples == 0 ){
+            looper(curLoop)->allocate( sampleRate * 10.f );
+        }else looper(curLoop)->clear();
 
 		recordButton->setToggleState(true,false);
 
-        loops[curLoop]->stop();
-        loops[curLoop]->record();
+        looper(curLoop)->stop();
+        looper(curLoop)->record();
 
 	}else{
 
-        loops[curLoop]->stop();
+        looper(curLoop)->stop();
 		recordButton->setToggleState(false,false);
         recordoutButton->setToggleState(false,false);
 		play();
@@ -826,20 +829,20 @@ void RangLoopComponent::toggleRecord(){
 
 }
 void RangLoopComponent::toggleStack(){
-    loops[curLoop]->stack();
-	stackButton->setToggleState(loops[curLoop]->stacking,false);
+    looper(curLoop)->stack();
+	stackButton->setToggleState(looper(curLoop)->stacking,false);
 }
 void RangLoopComponent::toggleReverse(){
 
-    loops[curLoop]->reverse();
-    reverseButton->setToggleState(loops[curLoop]->reversing,false);
+    looper(curLoop)->reverse();
+    reverseButton->setToggleState(looper(curLoop)->reversing,false);
 
 }
 void RangLoopComponent::switchLoop(int index){
 
-    if( index == curLoop ) loops[curLoop]->playing = !loops[curLoop]->playing && loops[curLoop]->numSamples;
+    if( index == curLoop ) looper(curLoop)->playing = !looper(curLoop)->playing && looper(curLoop)->numSamples;
 
-	if( loops[curLoop]->recording ) toggleRecord();
+	if( looper(curLoop)->recording ) toggleRecord();
     loopComps[curLoop]->selected = false;
 
     curLoop = index;
@@ -848,13 +851,13 @@ void RangLoopComponent::switchLoop(int index){
 
 }
 void RangLoopComponent::updateLoop(){
-    loops[curLoop]->decay = 1.f - decayKnob->getValue()/decayKnob->getMaximum();
-    loops[curLoop]->gain = 3.f * volumeKnob->getValue()/volumeKnob->getMaximum();
-    loops[curLoop]->pan = panKnob->getValue()/panKnob->getMaximum();
+    looper(curLoop)->decay = 1.f - decayKnob->getValue()/decayKnob->getMaximum();
+    looper(curLoop)->gain = 3.f * volumeKnob->getValue()/volumeKnob->getMaximum();
+    looper(curLoop)->pan = panKnob->getValue()/panKnob->getMaximum();
 }
 void RangLoopComponent::updateControls(){
     
-    Loop* loop = loops[curLoop];
+    Loop* loop = looper(curLoop);
     decayKnob->setValue( (1.f-loop->decay)*decayKnob->getMaximum(), false );
     volumeKnob->setValue( loop->gain*volumeKnob->getMaximum()/3.f, false );
     panKnob->setValue( loop->pan*panKnob->getMaximum(), false );
@@ -863,14 +866,14 @@ void RangLoopComponent::updateControls(){
     
 }
 void RangLoopComponent::updatePlaybackSlider(){
-    Loop* loop = loops[curLoop];
+    Loop* loop = looper(curLoop);
     if( loop->numSamples ){
-        float min = loop->b[0].rMin * slider->getMaximum() / loop->b[0].curSize;
-        float max = loop->b[0].rMax * slider->getMaximum() / loop->b[0].curSize;
-        float pos = loop->b[0].rPos * slider->getMaximum() / loop->b[0].curSize;
-        slider->setMinValue(min);
-        slider->setMaxValue(max);
-        slider->setValue(pos);
+        //float min = loop->b[0].rMin * slider->getMaximum() / loop->b[0].curSize;
+        //float max = loop->b[0].rMax * slider->getMaximum() / loop->b[0].curSize;
+        //float pos = loop->b[0].rPos * slider->getMaximum() / loop->b[0].curSize;
+        //slider->setMinValue(min);
+        //slider->setMaxValue(max);
+        //slider->setValue(pos);
     } 
 }
 
@@ -883,15 +886,24 @@ void RangLoopComponent::audioDeviceIOCallback (const float** inputChannelData,
   for (int i = 0; i < totalNumOutputChannels; ++i)
    if (outputChannelData[i] != 0)
       zeromem (outputChannelData[i], sizeof (float) * numSamples);
+    
+    looper.audioIO( (float**) inputChannelData, outputChannelData, numSamples );
 
-	for(int i=0; i < loops.size(); i++ )
+	/*for(int i=0; i < loops.size(); i++ )
         if( i != curLoop ) loops[i]->audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
     
     if( loops[curLoop]->recording && recordoutButton->getToggleState() )
         loops[curLoop]->audioIO( (float**)outputChannelData, 0, numSamples );
-    else loops[curLoop]->audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );
+    else loops[curLoop]->audioIO( (float**)inputChannelData, (float**)outputChannelData, numSamples );*/
+    
+    
   
-  recorder->audioDeviceIOCallback(  (const float**)outputChannelData, totalNumOutputChannels, 0, 0, numSamples );
+    if( recorder->isRecording() ){
+        AudioSampleBuffer buffer( (float**)inputChannelData, totalNumInputChannels, numSamples );
+        buffer.addFrom(0,0,outputChannelData[0], numSamples);
+        buffer.addFrom(1,0,outputChannelData[1], numSamples);        
+        recorder->audioDeviceIOCallback(  (const float**)inputChannelData, totalNumOutputChannels, 0, 0, numSamples );
+    }
 }
 
 void RangLoopComponent::audioDeviceAboutToStart (AudioIODevice* device)
@@ -931,10 +943,11 @@ void RangLoopComponent::focusOfChildComponentChanged (FocusChangeType cause){
 }
 void RangLoopComponent::timerCallback(){
 
-  for( int i=0; i < loops.size(); i++){
+  /*for( int i=0; i < loops.size(); i++){
     loops[i]->rms = loops[i]->b[0].getRMSR( 2048 );
     //loopComps[i]->repaint();
-  }
+  }*/
+    looper.updateRMS();
     updateControls();
     updatePlaybackSlider();
 

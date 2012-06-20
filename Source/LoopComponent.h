@@ -46,7 +46,7 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    LoopComponent(char* c);
+    LoopComponent( Loop *loop_, char* c);
     void audioDeviceIOCallback (const float** inputChannelData,
                                 int totalNumInputChannels,
                                 float** outputChannelData,
@@ -55,7 +55,7 @@ public:
     void audioDeviceAboutToStart (AudioIODevice* device);
     void audioDeviceStopped();
 
-    Loop loop;
+    Loop *loop;
     char* ident;
     bool selected;
     //[/UserMethods]
